@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <!-- Arg to change robot name and be able to spawn multiple robots-->
+    <arg name="robot_name" default="/"/>
+    <arg name="use_pos_ctrls" default="false"/>
+
+    <!-- Robot initial pose -->
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="roll"  default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw"   default="0.0"/>
+
+    <!-- ******************************************************************************************** -->
+    <!-- ******************************************************************************************** -->
+    <!-- Set the name of the URDF File to read with XACRO -->
+
+    <arg name="robot_xacro" value="$(find abb_irb120)/urdf/irb120.urdf.xacro
+                                    robot_namespace:=$(arg robot_name)
+                                    use_pos_ctrls:=$(arg use_pos_ctrls)"/>
+
+    <!-- ******************************************************************************************** -->
+    <!-- ******************************************************************************************** -->
+    <!-- Load all nodes related with the robot in the namespace -->
+
+
+    <!-- Load the urdf into the parameter server -->
+    <param name="robot_description" command="$(find xacro)/xacro $(arg robot_xacro)" />
+
+    <!-- Robot state publisher with set frequency -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" >
+        <rosparam param="publish_frequency">150</rosparam>
+    </node>
+
+    <!-- Spawn robot in Gazebo -->
+    <node 
+        pkg="gazebo_ros" 
+        type="spawn_model" 
+        name="spawn_robot"  
+        respawn="false"
+        args="-x $(arg x) -y $(arg y) -z $(arg z)
+            -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+            -urdf 
+            -param robot_description
+            -model $(arg robot_name)"
+    />
+
+    <!-- Controllers -->
+    <rosparam 
+        file="$(find abb_irb120)/config/irb120_pos_controller.yaml" 
+        command="load" 
+        if="$(arg use_pos_ctrls)"
+    />
+    <rosparam 
+        file="$(find abb_irb120)/config/irb120_vel_controller.yaml" 
+        command="load" 
+        unless="$(arg use_pos_ctrls)"
+    />
+
+    <node 
+        name="robot_ctrller" 
+        pkg="controller_manager" 
+        type="spawner" 
+        respawn="false" 
+        output="screen"
+        args=  "joint_state_controller
+                arm120_controller"
+    />
+
+</launch>

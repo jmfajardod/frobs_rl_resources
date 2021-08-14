@@ -1,0 +1,127 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- joint list -->
+	<joint name="joint_1" type="revolute">
+		<origin rpy="0 0 0" xyz="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="link_1"/>
+		<limit effort="1000" lower="-2.87979" upper="2.87979" velocity="4.36332"/>
+		<axis xyz="0 0 1"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_1">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_1">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_1">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<joint name="joint_2" type="revolute">
+		<origin rpy="0 0 0" xyz="0 0 0.29"/>
+		<parent link="link_1"/>
+		<child link="link_2"/>
+		<limit effort="1000" lower="-1.91986" upper="1.91986" velocity="4.36332"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_2">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_2">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_2">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<joint name="joint_3" type="revolute">
+		<origin rpy="0 0 0" xyz="0 0 0.27"/>
+		<parent link="link_2"/>
+		<child link="link_3"/>
+		<limit effort="1000" lower="-1.91986" upper="1.22173" velocity="4.36332"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_3">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_3">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_3">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<joint name="joint_4" type="revolute">
+		<origin rpy="0 0 0" xyz="0 0 0.07"/>
+		<parent link="link_3"/>
+		<child link="link_4"/>
+		<limit effort="1000" lower="-2.79253" upper="2.79253" velocity="5.58505"/>
+		<axis xyz="1 0 0"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_4">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_4">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_4">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<joint name="joint_5" type="revolute">
+		<origin rpy="0 0 0" xyz="0.302 0 0"/>
+		<parent link="link_4"/>
+		<child link="link_5"/>
+		<limit effort="1000" lower="-2.094395" upper="2.094395" velocity="5.58505"/>
+		<axis xyz="0 1 0"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_5">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_5">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_5">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+
+	<joint name="joint_6" type="revolute">
+		<origin rpy="0 0 0" xyz="0.072 0 0"/>
+		<parent link="link_5"/>
+		<child link="link_6"/>
+		<limit effort="1000" lower="-6.98132" upper="6.98132" velocity="7.33038"/>
+		<axis xyz="1 0 0"/>
+		<dynamics damping="0.0" friction="0.0"/>
+	</joint>
+
+	<transmission name="joint_6">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_6">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="joint_6">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+	</transmission>
+	<!-- end of joint list -->
+
+
+</robot>
