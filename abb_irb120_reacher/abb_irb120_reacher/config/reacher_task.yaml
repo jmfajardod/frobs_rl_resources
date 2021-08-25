@@ -62,7 +62,17 @@ irb120: #namespace
       y: 2.0
       z: 2.0
 
-    tolerance_goal_pos: 0.005 # Tolerance for the position of the goal
+    tolerance_goal_pos: 0.01 # Tolerance for the position of the goal
+
+    training: True
+    pos_dynamic: False
+    pos_dynamic_params:
+      x_max_amplitude: 0.1
+      y_max_amplitude: 0.1
+      z_max_amplitude: 0.1
+      x_max_freq: 0.01
+      y_max_freq: 0.01
+      z_max_freq: 0.01
 
     #-----------------------------------------------------------------------------------------#
     #--- Set variables related to rewards
