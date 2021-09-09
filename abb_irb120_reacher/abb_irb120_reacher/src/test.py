@@ -16,10 +16,14 @@ from stable_baselines3.common.env_checker import check_env
 if __name__ == '__main__':
 
 
-    rospy.logwarn("Start")
+    # Launch Gazebo 
+    #ros_gazebo.Launch_Gazebo(paused=True, pub_clock_frequency=100)
 
+    # Start node
+    rospy.logwarn("Start")
     rospy.init_node('test_irb120_reacher')
 
+    # Launch the task environment
     env = gym.make('ABBIRB120ReacherEnv-v0')
 
     #--- Normalize action space

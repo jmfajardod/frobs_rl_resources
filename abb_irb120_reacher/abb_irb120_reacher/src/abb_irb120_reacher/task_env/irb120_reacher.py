@@ -13,8 +13,11 @@ from gym_gazebo_sb3.common import ros_urdf
 from gym_gazebo_sb3.common import ros_spawn
 from abb_irb120_reacher.robot_env import abb_irb120_moveit
 import rospy
+import rostopic
 
 from visualization_msgs.msg import Marker
+from geometry_msgs.msg import Point
+from gazebo_msgs.srv import SetLinkState, SetLinkStateRequest, SetLinkStateResponse
 
 import numpy as np
 import scipy.spatial
@@ -30,7 +33,7 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
     Custom Task Env, use this env to implement a task using the robot defined in the CustomRobotEnv
     """
 
-    def __init__(self, training=True):
+    def __init__(self):
         """
         Describe the task.
         """
@@ -41,7 +44,6 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         """
         ros_params.ROS_Load_YAML_from_pkg("abb_irb120_reacher", "reacher_task.yaml", ns="/")
         self.get_params()
-        self.training = training
 
         """
         Define the action and observation space.
@@ -87,7 +89,39 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         """
         Define subscribers or publishers as needed.
         """
+
+        #--- Make Marker msg for publishing
+        self.goal_marker = Marker()
+        self.goal_marker.header.frame_id="world"
+        self.goal_marker.header.stamp = rospy.Time.now()
+        self.goal_marker.ns = "goal_shapes"
+        self.goal_marker.id = 0
+        self.goal_marker.type = Marker.SPHERE
+        self.goal_marker.action = Marker.ADD
+
+        self.goal_marker.pose.position.x = 0.0
+        self.goal_marker.pose.position.y = 0.0
+        self.goal_marker.pose.position.z = 0.0
+        self.goal_marker.pose.orientation.x = 0.0
+        self.goal_marker.pose.orientation.y = 0.0
+        self.goal_marker.pose.orientation.z = 0.0
+        self.goal_marker.pose.orientation.w = 1.0
+
+        self.goal_marker.scale.x = 0.1
+        self.goal_marker.scale.y = 0.1
+        self.goal_marker.scale.z = 0.1
+
+        self.goal_marker.color.r = 1.0
+        self.goal_marker.color.g = 0.0
+        self.goal_marker.color.b = 0.0
+        self.goal_marker.color.a = 1.0
+
         self.pub_marker = rospy.Publisher("goal_point",Marker,queue_size=10)
+        self.goal_subs  = rospy.Subscriber("goal_pos", Point, self.goal_callback)
+        if self.training:
+            ros_node.ROS_Node_from_pkg("abb_irb120_reacher", "pos_publisher.py", name="pos_publisher", ns="/")
+            rospy.wait_for_service("set_init_point")
+            self.set_init_goal_client = rospy.ServiceProxy("set_init_point", SetLinkState)
 
         """
         Init super class.
@@ -117,38 +151,20 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         #--- If training set random goal
         if self.training:
             self.init_pos = self.get_randomJointVals()
-            self.goal = self.get_randomValidGoal()
+            init_goal_vector = self.get_randomValidGoal()
+            self.goal = init_goal_vector
+            init_goal_msg = SetLinkStateRequest()
+            init_goal_msg.link_state.pose.position.x = init_goal_vector[0]
+            init_goal_msg.link_state.pose.position.y = init_goal_vector[1]
+            init_goal_msg.link_state.pose.position.z = init_goal_vector[2]
+
+            self.set_init_goal_client.call(init_goal_msg)
             rospy.logwarn("Desired goal--->" + str(self.goal))
-        
-        else:
-            self.init_pos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            self.goal_ee_pos = rospy.get_param('/irb120/goal_ee_pos')
-            goal = np.array([self.goal_ee_pos["x"], self.goal_ee_pos["y"], self.goal_ee_pos["z"]])
-            if self.test_goalPose(goal):
-                self.goal = goal
-            else:
-                self.goal = self.get_randomValidGoal()
 
         #--- Make Marker msg for publishing
-        self.goal_marker = Marker()
-        self.goal_marker.header.frame_id="world"
-        self.goal_marker.header.stamp = rospy.Time.now()
-        self.goal_marker.ns = "goal_shapes"
-        self.goal_marker.id = 0
-        self.goal_marker.type = Marker.SPHERE
-        self.goal_marker.action = Marker.ADD
-
         self.goal_marker.pose.position.x = self.goal[0]
         self.goal_marker.pose.position.y = self.goal[1]
         self.goal_marker.pose.position.z = self.goal[2]
-        self.goal_marker.pose.orientation.x = 0.0
-        self.goal_marker.pose.orientation.y = 0.0
-        self.goal_marker.pose.orientation.z = 0.0
-        self.goal_marker.pose.orientation.w = 1.0
-
-        self.goal_marker.scale.x = 0.1
-        self.goal_marker.scale.y = 0.1
-        self.goal_marker.scale.z = 0.1
 
         self.goal_marker.color.r = 1.0
         self.goal_marker.color.g = 0.0
@@ -188,23 +204,24 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         Orientation for the moment is not considered
         TODO Check if observations are enough
         """
-        #--- Publish goal
-        self.pub_marker.publish(self.goal_marker)
 
         #--- Get Current Joint values
         self.joint_values = self.get_joint_angles()
+
+        #--- Get current goal
+        current_goal = self.goal
 
         #--- Get EE position
         ee_pos_v = self.get_ee_pose() # Get a geometry_msgs/PoseStamped msg
         self.ee_pos = np.array([ee_pos_v.pose.position.x, ee_pos_v.pose.position.y, ee_pos_v.pose.position.z])
 
         #--- Vector to goal
-        vec_EE_GOAL = self.goal - self.ee_pos
+        vec_EE_GOAL = current_goal - self.ee_pos
         vec_EE_GOAL = vec_EE_GOAL / np.linalg.norm(vec_EE_GOAL)
 
         obs = np.concatenate((
             vec_EE_GOAL,             # Vector from EE to Goal
-            self.goal,               # Position of Goal
+            current_goal,               # Position of Goal
             #self.ee_pos,            # Current position of EE
             self.joint_values        # Current joint angles
             ),
@@ -214,7 +231,7 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(obs))
 
         #--- UNCOMMENT TO RETURN A DICT WITH OBS AND GOAL
-        #return {
+        # return {
         #    'observation':   obs.copy(),
         #    'desired_goal':  self.goal.copy(),
         #}
@@ -239,34 +256,42 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         done = False
         done = self.calculate_if_done(self.movement_result, self.goal, current_pos)
         if done:
-            rospy.logwarn("SUCCESS Reached a Desired Position!")
-            self.info['is_success'] = 1.0
+            if self.pos_dynamic is False:
+                rospy.logwarn("SUCCESS Reached a Desired Position!")
+                self.info['is_success'] = 1.0
 
+            #- Success reward
             reward += self.reached_goal_reward
 
-            # Publish reached_goal_marker 
-            self.reached_goal_marker = self.goal_marker
-            self.reached_goal_marker.header.stamp = rospy.Time.now()
-            self.reached_goal_marker.ns = "reached_goal_shapes"
-            self.reached_goal_marker.color.r = 0.0
-            self.reached_goal_marker.color.g = 1.0
-            self.reached_goal_marker.lifetime = rospy.Duration(secs=5)
-            self.pub_marker.publish(self.reached_goal_marker)
+            # Publish goal_marker 
+            self.goal_marker.header.stamp = rospy.Time.now()
+            self.goal_marker.color.r = 0.0
+            self.goal_marker.color.g = 1.0
+            self.goal_marker.lifetime = rospy.Duration(secs=5)
+            
 
         else:
+            # Publish goal_marker 
+            self.goal_marker.header.stamp = rospy.Time.now()
+            self.goal_marker.color.r = 1.0
+            self.goal_marker.color.g = 0.0
+            self.goal_marker.lifetime = rospy.Duration(secs=5)
 
-            #- Check if joints are in limits
-            joint_angles = np.array(self.joint_values)
-            min_joint_values = np.array(self.min_joint_values)
-            max_joint_values = np.array(self.max_joint_values)
-            in_limits = np.any(joint_angles<=(min_joint_values+0.0001)) or np.any(joint_angles>=(max_joint_values-0.0001))
-            reward += in_limits*self.joint_limits_reward
             #- Distance from EE to Goal reward
             dist2goal = scipy.spatial.distance.euclidean(current_pos, self.goal)
             reward += - self.mult_dist_reward*dist2goal 
+
             #- Constant reward
             reward += self.step_reward
-        
+
+        self.pub_marker.publish(self.goal_marker)
+
+        #- Check if joints are in limits
+        joint_angles = np.array(self.joint_values)
+        min_joint_values = np.array(self.min_joint_values)
+        max_joint_values = np.array(self.max_joint_values)
+        in_limits = np.any(joint_angles<=(min_joint_values+0.0001)) or np.any(joint_angles>=(max_joint_values-0.0001))
+        reward += in_limits*self.joint_limits_reward
 
         rospy.logwarn(">>>REWARD>>>"+str(reward))
 
@@ -285,6 +310,10 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         done = self.calculate_if_done(self.movement_result, self.goal, current_pos)
         if done:
             rospy.logdebug("Reached a Desired Position!")
+
+        #--- If the position is dynamic the episode is never done
+        if self.pos_dynamic is True:
+            done = False
 
         return done
 
@@ -318,6 +347,9 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
 
         #--- Get parameter asociated to goal tolerance
         self.tol_goal_ee = rospy.get_param('/irb120/tolerance_goal_pos')
+        self.training = rospy.get_param('/irb120/training')
+        self.pos_dynamic = rospy.get_param('/irb120/pos_dynamic')
+        rospy.logwarn("Dynamic position:  " + str(self.pos_dynamic))
 
         #--- Get reward parameters
         self.reached_goal_reward = rospy.get_param('/irb120/reached_goal_reward')
@@ -385,3 +417,16 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
             done = True
         
         return done
+
+    def goal_callback(self, data):
+        """
+        Callback to the topic used to send goals
+        """
+        self.goal = np.array([data.x, data.y, data.z])
+
+        #--- Publish goal marker
+        self.goal_marker.pose.position.x = self.goal[0]
+        self.goal_marker.pose.position.y = self.goal[1]
+        self.goal_marker.pose.position.z = self.goal[2]
+        self.goal_marker.lifetime = rospy.Duration(secs=1)
+        self.pub_marker.publish(self.goal_marker)
