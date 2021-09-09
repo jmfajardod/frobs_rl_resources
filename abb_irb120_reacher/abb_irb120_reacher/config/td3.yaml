@@ -11,10 +11,10 @@ model_params:
 
   # Load model params
   load_model: True
-  model_name: trained_model_25_08_2021_03_51_53
+  model_name: trained_model_01_09_2021_10_11_11
 
   # Logging parameters
-  log_folder: TD3_2
+  log_folder: TD3_5
   log_interval: 4 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 

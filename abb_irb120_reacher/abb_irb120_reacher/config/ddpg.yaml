@@ -10,11 +10,11 @@ model_params:
   save_replay_buffer: False
 
   # Load model params
-  load_model: True
+  load_model: False
   model_name: ddpg_model_15000_steps
 
   # Logging parameters
-  log_folder: DDPG_4
+  log_folder: DDPG_1
   log_interval: 4 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 

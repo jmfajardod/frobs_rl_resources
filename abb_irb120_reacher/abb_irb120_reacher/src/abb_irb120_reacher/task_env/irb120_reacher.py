@@ -260,6 +260,7 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
                 rospy.logwarn("SUCCESS Reached a Desired Position!")
                 self.info['is_success'] = 1.0
 
+            #- Success reward
             reward += self.reached_goal_reward
 
             # Publish goal_marker 
@@ -276,6 +277,13 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
             self.goal_marker.color.g = 0.0
             self.goal_marker.lifetime = rospy.Duration(secs=5)
 
+            #- Distance from EE to Goal reward
+            dist2goal = scipy.spatial.distance.euclidean(current_pos, self.goal)
+            reward += - self.mult_dist_reward*dist2goal 
+
+            #- Constant reward
+            reward += self.step_reward
+
         self.pub_marker.publish(self.goal_marker)
 
         #- Check if joints are in limits
@@ -284,13 +292,6 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         max_joint_values = np.array(self.max_joint_values)
         in_limits = np.any(joint_angles<=(min_joint_values+0.0001)) or np.any(joint_angles>=(max_joint_values-0.0001))
         reward += in_limits*self.joint_limits_reward
-
-        #- Distance from EE to Goal reward
-        dist2goal = scipy.spatial.distance.euclidean(current_pos, self.goal)
-        reward += - self.mult_dist_reward*dist2goal 
-
-        #- Constant reward
-        reward += self.step_reward
 
         rospy.logwarn(">>>REWARD>>>"+str(reward))
 
