@@ -9,7 +9,7 @@ project(abb_irb120_reacher)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
-  gym_gazebo_sb3
+  frobs_rl
   rospy
   sensor_msgs
   std_msgs
@@ -107,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES abb_irb120_reacher
-#  CATKIN_DEPENDS geometry_msgs gym_gazebo_sb3 rospy sensor_msgs std_msgs
+#  CATKIN_DEPENDS geometry_msgs frobs_rl rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
 

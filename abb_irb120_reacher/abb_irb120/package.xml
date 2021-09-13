@@ -5,7 +5,7 @@
   <description>Package that contains the description of the robot ABB IRB120</description>
 
   <maintainer email="jmfajardod@unal.edu.co">Jose Fajardo</maintainer>
-  <maintainer email="srealper@unal.edu.co">srealper</maintainer>
+  <maintainer email="srealper@unal.edu.co">Sebastian Realpe</maintainer>
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>

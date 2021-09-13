@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ************************************************************************ -->
+    <!-- Init Simulator -->
+    
+    <!-- Define world -->
+    <arg name="maze_world" default="$(find kobuki_maze_rl)/worlds/maze_world.world"/>
+
+    <!-- Launch Gazebo-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg maze_world)"/> 
+        <arg name="use_sim_time" value="true"/>
+        <arg name="debug" value="false"/>
+        <arg name="paused" value="false"/>
+    </include>
+
+    <!-- ************************************************************************ -->
+    <!-- Spawn Robot-->
+    
+    <!-- Robot initial pose -->
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.01"/>
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="$(eval 0.0 * 3.141592 / 180.0)"/>
+
+    <!-- Load Robot URDF description -->
+    <arg name="robot_name" value="mobile_base"/>
+    <param 
+        name="robot_description" 
+        command="$(find xacro)/xacro '$(find kobuki_maze_rl)/urdf/kobuki_lidar.urdf.xacro'"
+    />
+    
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_$(arg robot_name)" respawn="false"
+        args="-x $(arg x) -y $(arg y) -z $(arg z)
+            -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+            -urdf -param robot_description 
+            -model $(arg robot_name)"
+            >
+    </node>
+
+    <!-- ************************************************************************ -->
+    <!-- Robot State Publisher and Joint State Publisher -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+        <param name="publish_frequency" type="double" value="30.0"/>
+    </node>
+    
+
+</launch>
