@@ -4,14 +4,14 @@ import gym
 from gym import utils
 from gym import spaces
 from gym.envs.registration import register
-from gym_gazebo_sb3.common import ros_gazebo
-from gym_gazebo_sb3.common import ros_controllers
-from gym_gazebo_sb3.common import ros_node
-from gym_gazebo_sb3.common import ros_launch
-from gym_gazebo_sb3.common import ros_params
-from gym_gazebo_sb3.common import ros_urdf
-from gym_gazebo_sb3.common import ros_spawn
-from gym_gazebo_sb3.envs import robot_BasicEnv
+from frobs_rl.common import ros_gazebo
+from frobs_rl.common import ros_controllers
+from frobs_rl.common import ros_node
+from frobs_rl.common import ros_launch
+from frobs_rl.common import ros_params
+from frobs_rl.common import ros_urdf
+from frobs_rl.common import ros_spawn
+from frobs_rl.envs import robot_BasicEnv
 import rospy
 
 import rosnode

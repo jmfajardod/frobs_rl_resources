@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>kobuki_maze_rl</name>
+  <version>0.0.0</version>
+  <description>The kobuki_maze_rl package</description>
+
+  <maintainer email="jmfajardod@unal.edu.co">Jose Fajardo</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>kobuki_gazebo</build_depend>
+  <build_depend>frobs_rl</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>kobuki_gazebo</build_export_depend>
+  <build_export_depend>frobs_rl</build_export_depend>
+  <build_export_depend>nav_msgs</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>kobuki_gazebo</exec_depend>
+  <exec_depend>frobs_rl</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export></export>
+  
+</package>

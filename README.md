@@ -1,1 +1,1 @@
-# gym_gazebo_sb3_resources
+# M2RL Resources

@@ -6,18 +6,18 @@ import gym
 import rospy
 import rospkg
 import sys
-from gym_gazebo_sb3.common import ros_gazebo
-from gym_gazebo_sb3.common.ros_node import ROS_Kill_All_processes
-from gym_gazebo_sb3.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
-from gym_gazebo_sb3.wrappers.TimeLimitWrapper import TimeLimitWrapper
-from gym_gazebo_sb3.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
+from frobs_rl.common import ros_gazebo
+from frobs_rl.common.ros_node import ROS_Kill_All_processes
+from frobs_rl.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
+from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
+from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
 
 # Models
-from gym_gazebo_sb3.models.ddpg import DDPG
-from gym_gazebo_sb3.models.td3 import TD3
-from gym_gazebo_sb3.models.sac import SAC
-from gym_gazebo_sb3.models.ppo import PPO
-from gym_gazebo_sb3.models.dqn import DQN
+from frobs_rl.models.ddpg import DDPG
+from frobs_rl.models.td3 import TD3
+from frobs_rl.models.sac import SAC
+from frobs_rl.models.ppo import PPO
+from frobs_rl.models.dqn import DQN
 
 if __name__ == '__main__':
 

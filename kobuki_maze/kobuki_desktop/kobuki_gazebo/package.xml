@@ -1,0 +1,23 @@
+<package>
+  <name>kobuki_gazebo</name>
+  <version>0.5.7</version>
+  <description>Kobuki simulation for Gazebo</description>
+  <author>Marcus Liebhardt</author>
+  <maintainer email="marcus.liebhardt@yujinrobot.com">Marcus Liebhardt</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/kobuki_gazebo</url>
+  <url type="repository">https://github.com/yujinrobot/kobuki_desktop</url>
+  <url type="bugtracker">https://github.com/yujinrobot/kobuki_desktop/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- launch file dependencies -->
+  <run_depend>yocs_cmd_vel_mux</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_plugins</run_depend>
+  <run_depend>kobuki_description</run_depend>
+  <run_depend>kobuki_gazebo_plugins</run_depend>
+  <run_depend>kobuki_random_walker</run_depend>
+  <run_depend>kobuki_safety_controller</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+</package>

@@ -4,11 +4,11 @@ from abb_irb120_reacher.task_env.irb120_reacher import abb_irb120_moveit
 import gym
 import rospy
 import sys
-from gym_gazebo_sb3.common import ros_gazebo
-from gym_gazebo_sb3.common.ros_node import ROS_Kill_All_processes
-from gym_gazebo_sb3.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
-from gym_gazebo_sb3.wrappers.TimeLimitWrapper import TimeLimitWrapper
-from gym_gazebo_sb3.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
+from frobs_rl.common import ros_gazebo
+from frobs_rl.common.ros_node import ROS_Kill_All_processes
+from frobs_rl.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
+from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
+from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
 
 # SB3 Checker
 from stable_baselines3.common.env_checker import check_env
