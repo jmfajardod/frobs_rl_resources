@@ -1,0 +1,34 @@
+kobuki_maze:
+  # The maze task
+  action_space: 2
+  observation_space: 43
+  lidar_samples: 36 
+
+  #-----------------------------------------------------------------------------------------#
+  #--- Simulation parameters
+  
+  time_step: 0.01
+  update_rate_multiplier: 10.0 # If training multiply the max update rate by this number 
+
+  #-----------------------------------------------------------------------------------------#
+  #--- Set goal pos parameters
+
+  tolerance_goal_pos: 0.10 # Tolerance for the position of the goal
+
+  training: True
+  pos_dynamic_params:
+    x_max_amplitude: 0.1
+    y_max_amplitude: 0.1
+    z_max_amplitude: 0.1
+    x_max_freq: 0.01
+    y_max_freq: 0.01
+    z_max_freq: 0.01
+
+  #-----------------------------------------------------------------------------------------#
+  #--- Set variables related to rewards
+  
+  step_reward: 0.0
+  multiplier_dist_reward: 0.10
+  reached_goal_reward: 10
+  collision_reward: -5.0 # If collision with the wall
+  collision_distance_threshold: 0.19 # If collision with the wall

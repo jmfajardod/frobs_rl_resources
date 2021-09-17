@@ -169,6 +169,7 @@
       </sensor>
     </gazebo>
 
+    <!--
     <gazebo>
       <plugin name="kobuki_controller" filename="libgazebo_ros_kobuki.so">
         <publish_tf>1</publish_tf>
@@ -184,6 +185,33 @@
         <cliff_detection_threshold>0.04</cliff_detection_threshold>
         <bumper_name>bumpers</bumper_name>
         <imu_name>imu</imu_name>
+      </plugin>
+    </gazebo>
+    -->
+
+    <gazebo>
+      <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <updateRate>60</updateRate>
+        <leftJoint>wheel_left_joint</leftJoint>
+        <rightJoint>wheel_right_joint</rightJoint>
+        <wheelSeparation>0.230</wheelSeparation>
+        <wheelDiameter>0.070</wheelDiameter>
+        <wheelAcceleration>1.0</wheelAcceleration>
+        <wheelTorque>20</wheelTorque>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
+        <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+        <odometrySource>1</odometrySource>
+        <!-- Set to true to publish transforms for the wheel links, defaults to false -->
+        <publishWheelTF>true</publishWheelTF>
+        <!-- Set to true to publish transforms for the odometry, defaults to true -->
+        <publishOdom>true</publishOdom>
+        <!-- Set to true to publish sensor_msgs/JointState on /joint_states for the wheel joints, defaults to false -->
+        <publishWheelJointState>true</publishWheelJointState>
+        <!-- Set to true to swap right and left wheels, defaults to true -->
+        <legacyMode>false</legacyMode>
       </plugin>
     </gazebo>
     

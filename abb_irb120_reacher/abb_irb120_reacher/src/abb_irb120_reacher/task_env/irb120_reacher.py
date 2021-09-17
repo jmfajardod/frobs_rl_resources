@@ -323,8 +323,8 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
     def get_params(self):
         """
         get configuration parameters
-
         """
+        
         self.sim_time = rospy.get_time()
         self.n_actions = rospy.get_param('/irb120/n_actions')
         self.n_observations = rospy.get_param('/irb120/n_observations')
@@ -399,7 +399,6 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
     def calculate_if_done(self, movement_result, goal, current_pos):
         """
         It calculated whether it has finished or not
-        TODO Check what to do if the movement was not succesful
         """
         done = False
 
