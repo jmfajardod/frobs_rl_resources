@@ -7,7 +7,6 @@ Panels:
         - /Global Options1
         - /Status1
         - /LaserScan1
-        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 363
   - Class: rviz/Selection
@@ -141,7 +140,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.10000000149011612
+      Size (m): 0.20000000298023224
       Style: Flat Squares
       Topic: /scan
       Unreliable: false
@@ -246,7 +245,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0
+      Angle: -0.014999843202531338
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -256,10 +255,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 28.88575553894043
-      Target Frame: <Fixed Frame>
-      X: 0.8530156016349792
-      Y: 0.6203749179840088
+      Scale: 32.55076217651367
+      Target Frame: base_footprint
+      X: -1.8196768760681152
+      Y: 1.2378771305084229
     Saved: ~
 Window Geometry:
   Displays:

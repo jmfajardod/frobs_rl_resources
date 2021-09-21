@@ -21,21 +21,21 @@ from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from visualization_msgs.msg import Marker 
 
 register(
-        id='KobukiEmptyEnv-v0',
-        entry_point='kobuki_maze_rl.task_env.kobuki_empty:KobukiEmptyEnv',
+        id='KobukiDynamicEnv-v3',
+        entry_point='kobuki_maze_rl.task_env.kobuki_dynamic_v3:KobukiDynamicEnv',
         max_episode_steps=100000000000,
     )
 
-class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
+class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
     """
-    Kobuki Empty Env, specific methods.
+    Kobuki Dynamic Env, specific methods.
     """
 
     def __init__(self):
         """
         Task is to move the robot from the start position to the goal position, avoiding collisions.
         """
-        rospy.loginfo("Starting Kobuki Empty Env")
+        rospy.loginfo("Starting Kobuki Dynamic Env")
 
         """
         Load YAML param file
@@ -46,41 +46,37 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Define the action and observation space.
         """
-        action_space_low  = np.array([-0.3, -0.3]) 
-        action_space_high = np.array([ 0.3,  0.3])
+        action_space_low  = np.array([-1.0, -1.0]) # linear velocity, angular velocity
+        action_space_high = np.array([ 1.0,  1.0])
         self.action_space = spaces.Box(low=action_space_low, high=action_space_high, dtype=np.float32)
         rospy.logwarn("Action Space->>>" + str(self.action_space))
 
-        pose_low   = np.array([-6.0, -8.0, - np.pi])
-        pose_high  = np.array([ 26.0, 7.0, np.pi])
-        goal_low   = np.array([-6.0, -8.0])
-        goal_high  = np.array([26.0, 7.0])
-        dist_low   = np.array([-33.0, -16.0])
-        dist_high  = np.array([ 33.0,  16.0])
+        goal_low   = np.array([-25.0, -25.0])
+        goal_high  = np.array([ 25.0,  25.0])
         vec_ang_low  = np.array([0.0 , -np.pi])
-        vec_ang_high = np.array([37.0,  np.pi])
+        vec_ang_high = np.array([71.0,  np.pi])
         lidar_low  = 0.0 * np.ones(self.lidar_samples)
         lidar_high = 30.0 * np.ones(self.lidar_samples)
 
         # With LIDAR
-        # observ_space_low  = np.concatenate((pose_low,  goal_low,  dist_low,  lidar_low ))
-        # observ_space_high = np.concatenate((pose_high, goal_high, dist_high, lidar_high))
-        # Without LIDAR
-        observ_space_low  = vec_ang_low  #np.concatenate((dist_low, vec_ang_low))
-        observ_space_high = vec_ang_high #np.concatenate((dist_high, vec_ang_high))
+        observ_space_low  = np.concatenate((vec_ang_low,  lidar_low))
+        observ_space_high = np.concatenate((vec_ang_high, lidar_high))
         self.observation_space = spaces.Box(low=observ_space_low, high=observ_space_high, dtype=np.float32)
         rospy.logwarn("Observation Space->>>" + str(self.observation_space))
         rospy.logwarn("Observation Space Low  ->>>" + str(self.observation_space.low))
         rospy.logwarn("Observation Space High ->>>" + str(self.observation_space.high))
 
         # Spaces for initial robot position and goal position (for reset)
-        self.robot_pos_space = spaces.Box(low=np.array([-5.3, -7.0, -np.pi]), high=np.array([ 25.0, 6.3, np.pi]), dtype=np.float32)
-        self.goal_space = spaces.Box(low=goal_low, high=goal_high, dtype=np.float32)
+        self.angle_space = spaces.Box(low=-np.pi, high=np.pi, shape=(1,), dtype=np.float32)
+        self.goal_space  = spaces.Box(low=goal_low, high=goal_high, dtype=np.float32)
+
+        self.mag_vec_dist = 1.0
+        self.ang_rob_goal = 0.0
 
         """
         Init super class.
         """
-        super(KobukiEmptyEnv, self).__init__()
+        super(KobukiDynamicEnv, self).__init__()
 
         #--- Make Marker msg for publishing
         self.goal_marker = Marker()
@@ -113,13 +109,40 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.tf_br = tf.TransformBroadcaster()
         self.tf_listener = tf.TransformListener()
 
+        # Spawn the objects
+        UnitBox = ros_urdf.URDF_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Box")
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box1", pos_x=-13.0, pos_y= 13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box2", pos_x=  0.0, pos_y= 13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box3", pos_x= 13.0, pos_y= 13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box4", pos_x= 13.0, pos_y=  0.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box5", pos_x= 13.0, pos_y=-13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box6", pos_x=  0.0, pos_y=-13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box7", pos_x=-13.0, pos_y=-13.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box8", pos_x=-13.0, pos_y=  0.0)
+
+        self.init_box_traj = True
+        self.box_traj_dir  = 1
+        self.box_traj_num_steps = 2000
+        self.box_traj_count = 0
+        self.box1_step = 0.01
+        self.box2_step = 0.01
+        self.box3_step = 0.01
+        self.box4_step = 0.01
+        self.box5_step = 0.01
+        self.box6_step = 0.01
+        self.box7_step = 0.01
+        self.box8_step = 0.01
+
+        self.boxes_vel_space = spaces.Box(low=0.0, high=0.02, shape=(8,), dtype=np.float32)
+
+
         """
         Finished __init__ method
         """
-        rospy.loginfo("Finished Init of Kobuki Maze Env")
+        rospy.loginfo("Finished Init of Kobuki Dynamic Env")
 
     #-------------------------------------------------------#
-    #   Custom available methods for the KobukiEmptyEnv      #
+    #   Custom available methods for the KobukiDynamicEnv      #
 
     def _set_episode_init_params(self):
         """
@@ -127,15 +150,52 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """ 
         # Set the initial position of the robot
         
-        init_robot_pos = self.robot_pos_space.sample()
-        rospy.logwarn("Initial Robot Position->>>" + "X: " + str(init_robot_pos[0]) + " Y: " + str(init_robot_pos[1]) + " Theta: " + str(init_robot_pos[2]))
-        quat = quaternion_from_euler(0.0, 0.0, init_robot_pos[2])
-        ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=init_robot_pos[0], pos_y=init_robot_pos[1], pos_z=0.0,
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=0.0, pos_y=0.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+
+        # Set boxes initial positions
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box1", ref_frame="world", pos_x=-13.0, pos_y= 13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box2", ref_frame="world", pos_x=  0.0, pos_y= 13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box3", ref_frame="world", pos_x= 13.0, pos_y= 13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box4", ref_frame="world", pos_x= 13.0, pos_y=  0.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box5", ref_frame="world", pos_x= 13.0, pos_y=-13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box6", ref_frame="world", pos_x=  0.0, pos_y=-13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box7", ref_frame="world", pos_x=-13.0, pos_y=-13.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box8", ref_frame="world", pos_x=-13.0, pos_y=  0.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+
+        self.init_box_traj = True
+        self.box_traj_dir  = 1
+        self.box_traj_count = 0
+
+        sample_box_vel = self.boxes_vel_space.sample()
+        self.box1_step = sample_box_vel[0]
+        self.box2_step = sample_box_vel[1]
+        self.box3_step = sample_box_vel[2]
+        self.box4_step = sample_box_vel[3]
+        self.box5_step = sample_box_vel[4]
+        self.box6_step = sample_box_vel[5]
+        self.box7_step = sample_box_vel[6]
+        self.box8_step = sample_box_vel[7]
 
         # Set goal position
         self.goal_pos = self.goal_space.sample()
-        #self.goal_pos = np.array([25.0, -4.0])
 
         self.tf_br.sendTransform((self.goal_pos[0], self.goal_pos[1], 0.0),
                         quaternion_from_euler(0, 0, 0),
@@ -179,23 +239,23 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
             rospy.logwarn("Transformation was not found")
 
         dist_rob_goal= trans[0:2]
-        mag_vec_dist = np.sqrt(np.power(trans[0],2) + np.power(trans[1],2))
-        ang_rob_goal = np.arctan2(trans[1], trans[0])
+        self.mag_vec_dist = np.sqrt(np.power(trans[0],2) + np.power(trans[1],2))
+        self.ang_rob_goal = np.arctan2(trans[1], trans[0])
 
         # Get the lidar data
         lidar_ranges = self.get_lidar_ranges()
 
         obs = np.concatenate((
             #dist_rob_goal,   # Distance between robot and goal in robot frame
-            mag_vec_dist,    # Magnitude of the vector between robot and goal
-            ang_rob_goal     # Angle between robot and goal
-            #lidar_ranges     # Lidar ranges data
+            self.mag_vec_dist,     # Magnitude of the vector between robot and goal
+            self.ang_rob_goal,     # Angle between robot and goal
+            lidar_ranges      # Lidar ranges data
             ),
             axis=None
         )
 
-        #rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(pos) + "  " + str(dist_rob_goal) +  "  " + str(mag_vec_dist) +  "  " + str(ang_rob_goal))
-        rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(obs))
+        rospy.logwarn("OBSERVATIONS====>>>>>>>"+ str(self.mag_vec_dist) +  "  " + str(self.ang_rob_goal))
+        #rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(obs))
 
         return obs.copy()
 
@@ -222,13 +282,36 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
             self.goal_marker.color.b = 0.0
             self.goal_marker.color.a = 1.0
 
+        # Send goal transform
         self.tf_br.sendTransform((self.goal_pos[0], self.goal_pos[1], 0.0),
                         quaternion_from_euler(0, 0, 0),
                         rospy.Time.now(),
                         "goal_frame",
                         "odom")
 
+        # Publish goal marker
         self.pub_marker.publish(self.goal_marker)
+
+        # Set boxes new position
+        self.box_traj_count += 1
+        if self.init_box_traj:
+            if self.box_traj_count > self.box_traj_num_steps/2:
+                self.init_box_traj = False
+                self.box_traj_dir *= -1 
+                self.box_traj_count = 0
+        else:
+            if self.box_traj_count > self.box_traj_num_steps/2:
+                self.box_traj_dir *= -1 
+                self.box_traj_count = 0
+
+        ros_gazebo.Gazebo_set_model_state("box1", ref_frame="box1", pos_x=self.box_traj_dir*self.box1_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box2", ref_frame="box2", pos_x=self.box_traj_dir*self.box2_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box3", ref_frame="box3", pos_x=self.box_traj_dir*self.box3_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box4", ref_frame="box4", pos_x=self.box_traj_dir*self.box4_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box5", ref_frame="box5", pos_x=self.box_traj_dir*self.box5_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box6", ref_frame="box6", pos_x=self.box_traj_dir*self.box6_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box7", ref_frame="box7", pos_x=self.box_traj_dir*self.box7_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box8", ref_frame="box8", pos_x=self.box_traj_dir*self.box8_step, sleep_time=0.0)
 
         return done
 
@@ -251,8 +334,19 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         if done:
             reward += self.reached_goal_reward
         else:
-            dist2goal = scipy.spatial.distance.euclidean(robot_pos, goal_pos)
-            reward   -= self.mult_dist_reward*dist2goal
+            abs_angle = np.abs(self.ang_rob_goal)
+            angle_diff = np.minimum(abs_angle, np.pi - abs_angle)
+            rospy.logwarn("ANGLE DIFF: " + str(angle_diff))
+            reward   -= self.mult_dist_reward*self.mag_vec_dist 
+            reward   -= 0.5*angle_diff
+            
+
+        # Check if the robot is in collision
+        lidar_ranges = self.get_lidar_ranges()
+        min_range = np.min(lidar_ranges)
+        if np.any(min_range < self.collision_distance):
+            rospy.logwarn("Collision Detected!")
+            reward += self.collision_reward
 
         rospy.logwarn("REWARD====>>>>>>>"+str(reward))
 
@@ -260,7 +354,7 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
     
 
     #-------------------------------------------------------#
-    #  Internal methods for the KobukiEmptyEnv               #
+    #  Internal methods for the KobukiDynamicEnv               #
 
     def get_params(self):
         """

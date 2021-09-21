@@ -1,5 +1,6 @@
 #!/bin/python3
 
+import re
 import gym
 import rospy
 import sys
@@ -13,6 +14,9 @@ from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
 
 from kobuki_maze_rl.task_env import kobuki_maze
 
+from tf.transformations import quaternion_from_euler
+import numpy as np
+
 # Checker
 from frobs_rl.models.utils import check_env
 
@@ -20,7 +24,7 @@ if __name__ == '__main__':
 
 
     # Launch Gazebo 
-    ros_gazebo.Launch_Gazebo(paused=True,gui=True, pub_clock_frequency=100)
+    ros_gazebo.Launch_Gazebo(paused=False,gui=True, pub_clock_frequency=100)
 
     # Start node
     rospy.logwarn("Start")

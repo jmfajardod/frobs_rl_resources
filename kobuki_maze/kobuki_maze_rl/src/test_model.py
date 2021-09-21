@@ -15,8 +15,7 @@ from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
 from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
 
 # Models
-from frobs_rl.models.td3 import TD3
-from frobs_rl.models.sac import SAC
+from stable_baselines3 import TD3
 
 if __name__ == '__main__':
 
@@ -24,7 +23,7 @@ if __name__ == '__main__':
     ros_node.ROS_Kill_All_processes()
 
     # Launch Gazebo 
-    ros_gazebo.Launch_Gazebo(paused=True, gui=False)
+    ros_gazebo.Launch_Gazebo(paused=True, gui=True)
 
     # Start node
     rospy.logwarn("Start")
@@ -51,17 +50,19 @@ if __name__ == '__main__':
     
     #-- TD3
     save_path = pkg_path + "/models/dynamic/td3/"
-    log_path = pkg_path + "/logs/dynamic/td3/"
-    model = TD3(env, save_path, log_path, config_file_pkg="kobuki_maze_rl", config_filename="td3.yaml")
 
-    #-- SAC
-    # save_path = pkg_path + "/models/dynamic/sac/"
-    # log_path = pkg_path + "/logs/dynamic/sac/"
-    # model = SAC(env, save_path, log_path, config_file_pkg="kobuki_maze_rl", config_filename="sac.yaml")
+    model = TD3.load(save_path+ "trained_model_21_09_2021_11_30_00")
 
+    obs = env.reset()
+    episodes = 2
+    epi_count = 0
+    while epi_count < episodes:
+        action, _states = model.predict(obs, deterministic=True)
+        obs, _, dones, info = env.step(action)
+        if dones:
+            epi_count += 1
+            rospy.logwarn("Episode: " + str(epi_count))
+            obs = env.reset()
 
-    model.train()
-    model.save_model()
-    model.close_env()
-
+    env.close()
     sys.exit()
