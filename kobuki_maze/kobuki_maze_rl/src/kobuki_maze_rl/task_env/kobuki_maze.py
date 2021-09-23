@@ -12,6 +12,7 @@ from frobs_rl.common import ros_urdf
 from frobs_rl.common import ros_spawn
 from kobuki_maze_rl.robot_env import kobuki_lidar_env
 import rospy
+import tf
 
 import numpy as np
 import scipy.spatial
@@ -45,40 +46,35 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Define the action and observation space.
         """
-        action_space_low  = np.array([-0.3, -0.3]) 
-        action_space_high = np.array([ 0.3,  0.3])
+        action_space_low  = np.array([-1.0, -1.0]) # linear velocity, angular velocity
+        action_space_high = np.array([ 1.0,  1.0])
         self.action_space = spaces.Box(low=action_space_low, high=action_space_high, dtype=np.float32)
         rospy.logwarn("Action Space->>>" + str(self.action_space))
 
-        pose_low   = np.array([-6.0, -8.0, - np.pi])
-        pose_high  = np.array([ 26.0, 7.0, np.pi])
-        dist_low   = np.array([-32.0, -15.0])
-        dist_high  = np.array([ 32.0,  15.0])
+        vec_ang_low  = np.array([0.0 , -np.pi])
+        vec_ang_high = np.array([75.0,  np.pi])
+        pos_low   = np.array([-10.5, -13.5, -np.pi])
+        pos_high  = np.array([  5.5,  13.5,  np.pi])
+        goal_low  = np.array([-10.5, -13.5])
+        goal_high = np.array([  5.5,  13.5])
         lidar_low  = 0.0 * np.ones(self.lidar_samples)
         lidar_high = 30.0 * np.ones(self.lidar_samples)
-        goal_low   = np.array([-6.0, -8.0])
-        goal_high  = np.array([26.0, 7.0])
 
-        observ_space_low  = np.concatenate((pose_low,  dist_low,  lidar_low,  goal_low))
-        observ_space_high = np.concatenate((pose_high, dist_high, lidar_high, goal_high))
+        # With LIDAR
+        observ_space_low  = np.concatenate((vec_ang_low,  pos_low,  goal_low,  lidar_low))
+        observ_space_high = np.concatenate((vec_ang_high, pos_high, goal_high, lidar_high))
+        # observ_space_low  = np.concatenate((vec_ang_low,  lidar_low))
+        # observ_space_high = np.concatenate((vec_ang_high, lidar_high))
         self.observation_space = spaces.Box(low=observ_space_low, high=observ_space_high, dtype=np.float32)
         rospy.logwarn("Observation Space->>>" + str(self.observation_space))
+        rospy.logwarn("Observation Space Low  ->>>" + str(self.observation_space.low))
+        rospy.logwarn("Observation Space High ->>>" + str(self.observation_space.high))
 
         # Spaces for initial robot position and goal position (for reset)
-        self.robot_pos_space = spaces.Box(low=np.array([-5.3, -7.0, -np.pi]), high=np.array([ 25.0, 6.3, np.pi]), dtype=np.float32)
-        self.goal_space = spaces.Box(low=goal_low, high=goal_high, dtype=np.float32)
+        self.angle_space = spaces.Box(low=-np.pi, high=np.pi, shape=(1,), dtype=np.float32)
 
-        """
-        Define subscribers or publishers as needed.
-        """
-        # self.pub1 = rospy.Publisher('/robot/controller_manager/command', JointState, queue_size=1)
-        # self.sub1 = rospy.Subscriber('/robot/joint_states', JointState, self.callback1)
-
-        # Load kobuki maze
-        ObjectMaze = ros_urdf.URDF_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Kobuki_maze")
-
-        # Spawn the maze in Gazebo
-        ros_gazebo.Gazebo_spawn_sdf_string(ObjectMaze, model_name="kobuki_maze", pos_x=7.5, pos_y=2.0, pos_z=0.0)
+        self.mag_vec_dist = 1.0
+        self.ang_rob_goal = 0.0
 
         """
         Init super class.
@@ -113,6 +109,72 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
 
         self.pub_marker = rospy.Publisher("goal_point",Marker,queue_size=10)
 
+        self.tf_br = tf.TransformBroadcaster()
+        self.tf_listener = tf.TransformListener()
+
+        # Spawn the maze
+        MazeObj = ros_urdf.URDF_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Kobuki_maze_smallv2")
+        ros_gazebo.Gazebo_spawn_sdf_string(MazeObj, model_name="maze", pos_x= 3.7, pos_y= -4.3)
+
+        # Spawn the boxes
+        UnitBox = ros_urdf.URDF_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Box")
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box1", pos_x= -2.5, pos_y=-5.0)
+        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box2", pos_x= -6.5, pos_y=-5.0)
+
+        self.init_box_traj = True
+        self.box_traj_dir  = 1
+        self.box_traj_num_steps = 200
+        self.box_traj_count = 0
+        self.box1_step = 0.01
+        self.box2_step = 0.01
+
+        self.boxes_vel_space = spaces.Box(low=0.0, high=0.02, shape=(2,), dtype=np.float32)
+
+        # Set the possible trajectories for the robot
+        self.list_trajs = []
+        traj1 = np.array([  [-8.5,  0.0], # 1
+                            [-8.5, -2.0], # 2
+                            [-1.0, -7.0], # 3
+                            [-1.0,-11.5], # 4
+                            [ 3.0,-11.5], # 5
+                            [ 3.0, -6.0], # 6
+                            [ 3.0,  0.0]])# 7
+        self.list_trajs.append(traj1)
+
+        traj2 = np.array([  [-8.5,  0.0], # 1
+                            [-8.5, -2.0], # 2
+                            [-1.0, -7.0], # 3
+                            [-1.0,-11.5], # 4
+                            [-6.0, -9.5], # 5
+                            [-8.5, -9.5], # 6
+                            [-8.5,-11.5]])# 7
+        self.list_trajs.append(traj2)
+        
+        traj3 = np.array([  [-8.5,  0.0], # 1
+                            [-8.5, -2.0], # 2
+                            [-8.5, -3.0], # 3
+                            [-8.5, -4.0], # 4
+                            [-8.5, -5.0], # 5
+                            [-8.5, -6.0], # 6
+                            [-8.5, -7.0]])# 7
+        self.list_trajs.append(traj3)
+
+        traj4 = np.array([  [-8.5,  0.0], # 1
+                            [-8.5, -2.0], # 2
+                            [ 0.0, -4.0], # 3
+                            [ 0.0, -3.5], # 4
+                            [ 0.0, -3.0], # 5
+                            [ 0.0, -2.5], # 6
+                            [ 0.0, -2.0]])# 7
+        self.list_trajs.append(traj4)
+
+        self.curren_traj = self.list_trajs[0]
+        self.traj_space = spaces.Discrete(4)
+    
+        self.current_traj = self.list_trajs[self.traj_space.sample()]
+        self.curren_traj_len = self.current_traj.shape[0]
+        self.curren_traj_counter = 0
+
         """
         Finished __init__ method
         """
@@ -126,23 +188,42 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         Function to set some parameters, like the position of the robot, at the beginning of each episode.
         """ 
         # Set the initial position of the robot
-        done_rob_init = False
-        while not done_rob_init:
-            init_robot_pos = self.robot_pos_space.sample()
-            rospy.logwarn("Initial Robot Position->>>" + "X: " + str(init_robot_pos[0]) + " Y: " + str(init_robot_pos[1]) + " Theta: " + str(init_robot_pos[2]))
-            quat = quaternion_from_euler(0.0, 0.0, init_robot_pos[2])
-            ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=init_robot_pos[0], pos_y=init_robot_pos[1], pos_z=2.6,
-                                                ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
-            rospy.sleep(3.0)
-            _,check_pos,_,_ = ros_gazebo.Gazebo_get_model_state("kobuki_robot")
-            robot_euler = euler_from_quaternion([check_pos.orientation.x, check_pos.orientation.y, check_pos.orientation.z, check_pos.orientation.w])
-            if check_pos.position.z < 0.5 and robot_euler[0] < 0.1 and robot_euler[1] < 0.1:
-                rospy.logwarn("Valid robot init pos")
-                done_rob_init = True
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=-5.0, pos_y=7.5, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+
+        # Set boxes initial positions
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box1", ref_frame="world", pos_x=-2.5, pos_y=-5.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
+        ros_gazebo.Gazebo_set_model_state( "box2", ref_frame="world", pos_x=-6.5, pos_y=-5.0, pos_z=0.0,
+                                            ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
+        
+
+        self.init_box_traj = True
+        self.box_traj_dir  = 1
+        self.box_traj_count = 0
+
+        sample_box_vel = self.boxes_vel_space.sample()
+        self.box1_step = sample_box_vel[0]
+        self.box2_step = sample_box_vel[1]
 
         # Set goal position
-        self.goal_pos = self.goal_space.sample()
-        #self.goal_pos = np.array([25.0, -4.0])
+        num_traj = self.traj_space.sample()
+        self.current_traj = self.list_trajs[num_traj]
+        rospy.logwarn("Trajectory #:  " + str(num_traj))
+        self.curren_traj_len = self.current_traj.shape[0]
+        rospy.logwarn("Trajectory len:  " + str(self.curren_traj_len))
+        self.curren_traj_counter = 0
+        self.goal_pos = self.current_traj[self.curren_traj_counter]
+
+        self.tf_br.sendTransform((self.goal_pos[0], self.goal_pos[1], 0.0),
+                        quaternion_from_euler(0, 0, 0),
+                        rospy.Time.now()+rospy.Duration(3.0),
+                        "goal_frame",
+                        "odom")
+        
 
         self.goal_marker.pose.position.x = self.goal_pos[0]
         self.goal_marker.pose.position.y = self.goal_pos[1]
@@ -171,23 +252,38 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         # Get the current pose
         pos = np.append( self.get_robot_pos(), self.get_robot_ori() )
 
-        # Get the goal pose
-        goal = self.goal_pos
-        goal_dist = np.array([goal[0]-pos[0], goal[1]-pos[1]])
+        # Get the goal position
+        goal_pos = self.goal_pos
+
+
+        trans = np.array([0.0,0.0,0.0])
+        rot = np.array([0.0,0.0,0.0,0.0])
+        try:
+            (trans,rot) = self.tf_listener.lookupTransform('/base_footprint','/goal_frame', rospy.Time(0))
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            rospy.logwarn("Transformation was not found")
+
+        dist_rob_goal= trans[0:2]
+        self.mag_vec_dist = np.sqrt(np.power(trans[0],2) + np.power(trans[1],2))
+        self.ang_rob_goal = np.arctan2(trans[1], trans[0])
 
         # Get the lidar data
         lidar_ranges = self.get_lidar_ranges()
 
         obs = np.concatenate((
-            pos,             # Current robot pose obtained from Odom
-            goal,            # Goal position   
-            goal_dist,       # Distance in X and Y to Goal
-            lidar_ranges     # Lidar ranges data
+            self.mag_vec_dist,     # Magnitude of the vector between robot and goal
+            self.ang_rob_goal,     # Angle between robot and goal
+            pos,                   # Current pose
+            goal_pos,              # Goal position
+            lidar_ranges           # Lidar ranges data
             ),
             axis=None
         )
 
-        rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(pos) + "  " + str(goal_dist) +  "  " + str(goal))
+        rospy.logwarn("OBSERVATIONS====>>>>>>>"+ str(self.mag_vec_dist) +  "  " + str(self.ang_rob_goal))
+        rospy.logwarn("LIDAR====>>>>>>>"+ str(np.min(lidar_ranges)) )
+        # rospy.logwarn("OBSERVATIONS====>>>>>>>"+ str(self.mag_vec_dist) +  "  " + str(self.ang_rob_goal) + "  " +
+                                                    # str(pos) + "  " + str(goal_pos))
         #rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(obs))
 
         return obs.copy()
@@ -199,6 +295,13 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         If the episode has a success condition then set done as:
             self.info['is_success'] = 1.0
         """
+
+        # Set marker color
+        self.goal_marker.color.r = 0.0
+        self.goal_marker.color.g = 0.0
+        self.goal_marker.color.b = 1.0
+        self.goal_marker.color.a = 1.0
+
         # Get current robot position
         robot_pos = np.append(self.get_robot_pos(), np.array([0.0]) )
 
@@ -207,16 +310,56 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
 
         #--- Function used to calculate 
         done = self.calculate_if_done(goal_pos, robot_pos)
+        reached_midway = False
         if done:
             rospy.logdebug("Reached a Desired Position!")
-            self.info['is_success']  = 1.0
-            self.goal_marker.color.r = 0.0
-            self.goal_marker.color.g = 1.0
-            self.goal_marker.color.b = 0.0
-            self.goal_marker.color.a = 1.0
+            self.curren_traj_counter += 1
+            if self.curren_traj_counter >= self.curren_traj_len:
+                self.info['is_success']  = 1.0
+                rospy.logwarn("SUCCESS")
+                self.goal_marker.color.r = 0.0
+                self.goal_marker.color.g = 1.0
+                self.goal_marker.color.b = 0.0
+                self.goal_marker.color.a = 1.0
+            else:
+                rospy.logwarn("Reached Midway point")
+                done = False
+                reached_midway = True
+                self.goal_marker.color.r = 1.0
+                self.goal_marker.color.g = 0.0
+                self.goal_marker.color.b = 1.0
+                self.goal_marker.color.a = 1.0
 
+        # Send goal transform
+        self.tf_br.sendTransform((self.goal_pos[0], self.goal_pos[1], 0.0),
+                        quaternion_from_euler(0, 0, 0),
+                        rospy.Time.now(),
+                        "goal_frame",
+                        "odom")
 
+        # Publish goal marker
         self.pub_marker.publish(self.goal_marker)
+
+        # If reached midway point then update goal
+        if reached_midway:
+            self.goal_pos = self.current_traj[self.curren_traj_counter]
+            self.goal_marker.pose.position.x = self.goal_pos[0]
+            self.goal_marker.pose.position.y = self.goal_pos[1]
+
+        # Set boxes new position
+        self.box_traj_count += 1
+        if self.init_box_traj:
+            if self.box_traj_count > self.box_traj_num_steps/2:
+                self.init_box_traj = False
+                self.box_traj_dir *= -1 
+                self.box_traj_count = 0
+        else:
+            if self.box_traj_count > self.box_traj_num_steps:
+                self.box_traj_dir *= -1 
+                self.box_traj_count = 0
+
+        ros_gazebo.Gazebo_set_model_state("box1", ref_frame="box1", pos_x=self.box_traj_dir*self.box1_step, sleep_time=0.0)
+        ros_gazebo.Gazebo_set_model_state("box2", ref_frame="box2", pos_x=self.box_traj_dir*self.box2_step, sleep_time=0.0)
 
         return done
 
@@ -237,10 +380,22 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         # Check if done
         done = self.calculate_if_done(goal_pos, robot_pos)
         if done:
-            reward += self.reached_goal_reward
+            if self.curren_traj_counter >= self.curren_traj_len:
+                reward += self.reached_goal_reward
+            else:
+                reward += self.reached_midway_reward
         else:
-            dist2goal = scipy.spatial.distance.euclidean(robot_pos, goal_pos)
-            reward   -= self.mult_dist_reward*dist2goal
+            reward   -= self.mult_dist_reward*self.mag_vec_dist
+            
+            abs_angle = np.abs(self.ang_rob_goal)
+            angle_diff = np.minimum(abs_angle, np.pi - abs_angle)
+            rospy.logwarn("ANGLE DIFF: " + str(angle_diff))
+            reward   -= 0.5*angle_diff
+
+            remaining_midway = (self.curren_traj_len-self.curren_traj_counter)
+            rospy.logwarn("Remaining midway points: " + str(remaining_midway))
+            reward  += self.not_reached_midway_reward*remaining_midway
+            
 
         # Check if the robot is in collision
         lidar_ranges = self.get_lidar_ranges()
@@ -269,11 +424,13 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.tol_goal_pos = rospy.get_param('/kobuki_maze/tolerance_goal_pos')
 
         #--- Get reward parameters
-        self.reached_goal_reward = rospy.get_param('/kobuki_maze/reached_goal_reward')
-        self.step_reward = rospy.get_param('/kobuki_maze/step_reward')
-        self.mult_dist_reward = rospy.get_param('/kobuki_maze/multiplier_dist_reward')
-        self.collision_reward = rospy.get_param('/kobuki_maze/collision_reward')
-        self.collision_distance = rospy.get_param('/kobuki_maze/collision_distance_threshold')
+        self.reached_goal_reward       = rospy.get_param('/kobuki_maze/reached_goal_reward')
+        self.reached_midway_reward     = rospy.get_param('/kobuki_maze/reached_midway_reward')
+        self.not_reached_midway_reward = rospy.get_param('/kobuki_maze/not_reached_midway_reward')
+        self.step_reward               = rospy.get_param('/kobuki_maze/step_reward')
+        self.mult_dist_reward          = rospy.get_param('/kobuki_maze/multiplier_dist_reward')
+        self.collision_reward          = rospy.get_param('/kobuki_maze/collision_reward')
+        self.collision_distance        = rospy.get_param('/kobuki_maze/collision_distance_threshold')
 
         self.goal_pos = np.array([1.0, 0.0])
 

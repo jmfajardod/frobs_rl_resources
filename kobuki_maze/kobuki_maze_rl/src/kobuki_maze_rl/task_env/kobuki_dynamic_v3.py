@@ -40,7 +40,7 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Load YAML param file
         """
-        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "maze_task.yaml", ns="/")
+        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
         self.get_params()
 
         """
@@ -334,10 +334,10 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         if done:
             reward += self.reached_goal_reward
         else:
+            reward   -= self.mult_dist_reward*self.mag_vec_dist 
             abs_angle = np.abs(self.ang_rob_goal)
             angle_diff = np.minimum(abs_angle, np.pi - abs_angle)
             rospy.logwarn("ANGLE DIFF: " + str(angle_diff))
-            reward   -= self.mult_dist_reward*self.mag_vec_dist 
             reward   -= 0.5*angle_diff
             
 

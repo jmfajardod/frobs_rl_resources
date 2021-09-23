@@ -4,10 +4,7 @@ import re
 import gym
 import rospy
 import sys
-from frobs_rl.common import ros_gazebo
-from frobs_rl.common import ros_urdf
-from frobs_rl.common import ros_spawn
-from frobs_rl.common.ros_node import ROS_Kill_All_processes
+from frobs_rl.common import ros_gazebo, ros_urdf, ros_spawn, ros_node
 from frobs_rl.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
 from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
 from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
@@ -22,6 +19,8 @@ from frobs_rl.models.utils import check_env
 
 if __name__ == '__main__':
 
+    # Kill all processes related to previous runs
+    ros_node.ROS_Kill_All_processes()
 
     # Launch Gazebo 
     ros_gazebo.Launch_Gazebo(paused=False,gui=True, pub_clock_frequency=100)
@@ -35,3 +34,13 @@ if __name__ == '__main__':
 
     # Check env
     check_env(env)
+
+    # obs = env.reset()
+    # for ii in range(10000):
+    #     action = env.action_space.sample()
+    #     obs, _, dones, info = env.step(action)
+    #     if dones:
+    #         obs = env.reset()
+
+    # env.close()
+    # sys.exit()

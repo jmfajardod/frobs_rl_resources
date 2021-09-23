@@ -40,7 +40,7 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Load YAML param file
         """
-        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "maze_task.yaml", ns="/")
+        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
         self.get_params()
 
         """

@@ -73,7 +73,7 @@ class KobukiLIDAREnv(robot_BasicEnv.RobotBasicEnv):
         """
         super(KobukiLIDAREnv, self).__init__( spawn_robot=spawn_robot, model_name_in_gazebo=model_name_in_gazebo, namespace=namespace, pkg_name=pkg_name, 
                     urdf_file=urdf_file, urdf_folder=urdf_folder, controller_file=controller_file, controller_list=controller_list, 
-                    urdf_xacro_args=urdf_xacro_args, rob_state_publisher_max_freq= rob_state_publisher_max_freq,
+                    urdf_xacro_args=urdf_xacro_args, rob_state_publisher_max_freq= rob_state_publisher_max_freq, rob_st_term=False,
                     model_pos_x=model_pos_x, model_pos_y=model_pos_y, model_pos_z=model_pos_z, 
                     model_ori_x=model_ori_x, model_ori_y=model_ori_y, model_ori_z=model_ori_z, model_ori_w=model_ori_w,
                     reset_mode=reset_mode, step_mode=step_mode)

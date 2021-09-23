@@ -8,14 +8,14 @@
         <sensor type="gpu_ray" name="lds_lfcd_sensor">
             <pose>0 0 0 0 0 0</pose>
             <visualize>$(arg laser_visual)</visualize>
-            <update_rate>60</update_rate>
+            <update_rate>100</update_rate>
             <ray>
                 <scan>
                     <horizontal>
-                        <samples>36</samples>
+                        <samples>8</samples>
                         <resolution>1</resolution>
                         <min_angle>-3.141592</min_angle>
-                        <max_angle>3.141592</max_angle>
+                        <max_angle> 2.356194</max_angle>
                     </horizontal>
                 </scan>
                 <range>
