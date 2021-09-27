@@ -152,11 +152,11 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         
         traj3 = np.array([  [-8.5,  0.0], # 1
                             [-8.5, -2.0], # 2
-                            [-8.5, -3.0], # 3
-                            [-8.5, -4.0], # 4
-                            [-8.5, -5.0], # 5
-                            [-8.5, -6.0], # 6
-                            [-8.5, -7.0]])# 7
+                            [-8.7, -3.0], # 3
+                            [-8.7, -4.0], # 4
+                            [-8.7, -5.0], # 5
+                            [-8.7, -6.0], # 6
+                            [-8.7, -7.0]])# 7
         self.list_trajs.append(traj3)
 
         traj4 = np.array([  [-8.5,  0.0], # 1
@@ -390,7 +390,7 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
             abs_angle = np.abs(self.ang_rob_goal)
             angle_diff = np.minimum(abs_angle, np.pi - abs_angle)
             rospy.logwarn("ANGLE DIFF: " + str(angle_diff))
-            reward   -= 0.5*angle_diff
+            reward   -= self.angle_diff_reward_multiplier*angle_diff
 
             remaining_midway = (self.curren_traj_len-self.curren_traj_counter)
             rospy.logwarn("Remaining midway points: " + str(remaining_midway))
@@ -431,6 +431,7 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.mult_dist_reward          = rospy.get_param('/kobuki_maze/multiplier_dist_reward')
         self.collision_reward          = rospy.get_param('/kobuki_maze/collision_reward')
         self.collision_distance        = rospy.get_param('/kobuki_maze/collision_distance_threshold')
+        self.angle_diff_reward_multiplier = rospy.get_param('/kobuki_maze/angle_diff_reward_multiplier')
 
         self.goal_pos = np.array([1.0, 0.0])
 

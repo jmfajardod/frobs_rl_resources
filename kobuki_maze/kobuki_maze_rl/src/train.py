@@ -41,7 +41,7 @@ if __name__ == '__main__':
     env = NormalizeObservWrapper(env)
 
     #--- Set max steps
-    env = TimeLimitWrapper(env, max_steps=5000)
+    env = TimeLimitWrapper(env, max_steps=15000)
     env.reset()
 
     #--- Set the save and log path

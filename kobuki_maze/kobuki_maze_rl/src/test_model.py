@@ -1,9 +1,9 @@
 #!/bin/python3
 
 from numpy.lib.npyio import save
-from kobuki_maze_rl.task_env import kobuki_maze
 from kobuki_maze_rl.task_env import kobuki_empty
 from kobuki_maze_rl.task_env import kobuki_dynamic_v3
+from kobuki_maze_rl.task_env import kobuki_maze
 import gym
 import rospy
 import rospkg
@@ -31,7 +31,8 @@ if __name__ == '__main__':
 
     # Launch the task environment
     # env = gym.make('KobukiEmptyEnv-v0')
-    env = gym.make('KobukiDynamicEnv-v3')
+    # env = gym.make('KobukiDynamicEnv-v3')
+    env = gym.make('KobukiMazeEnv-v0')
 
     #--- Normalize action space
     env = NormalizeActionWrapper(env)
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     env = NormalizeObservWrapper(env)
 
     #--- Set max steps
-    env = TimeLimitWrapper(env, max_steps=5000)
+    env = TimeLimitWrapper(env, max_steps=15000)
     env.reset()
 
     #--- Set the save and log path
@@ -49,9 +50,9 @@ if __name__ == '__main__':
 
     
     #-- TD3
-    save_path = pkg_path + "/models/dynamic/td3/"
+    save_path = pkg_path + "/models/maze/td3/"
 
-    model = TD3.load(save_path+ "trained_model_21_09_2021_11_30_00")
+    model = TD3.load(save_path+ "trained_model_25_09_2021_04_49_19")
 
     obs = env.reset()
     episodes = 2
