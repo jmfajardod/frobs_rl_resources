@@ -52,7 +52,7 @@ if __name__ == '__main__':
     #-- TD3
     save_path = pkg_path + "/models/maze/td3/"
 
-    model = TD3.load(save_path+ "trained_model_25_09_2021_04_49_19")
+    model = TD3.load(save_path+ "trained_model_25_09_2021_23_57_33")
 
     obs = env.reset()
     episodes = 2

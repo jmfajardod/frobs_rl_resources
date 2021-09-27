@@ -14,7 +14,7 @@ model_params:
   model_name: trained_model_25_09_2021_04_49_19
 
   # Logging parameters
-  log_folder: TD3_5
+  log_folder: TD3_New
   log_interval: 1 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 
