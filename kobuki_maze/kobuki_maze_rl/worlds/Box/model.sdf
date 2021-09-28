@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+
+  <model name='unit_box'>
+    <pose>0.280571 -0.160515 0.5 0 -0 0</pose>
+    <gravity>0</gravity>
+    <link name='link'>
+      <inertial>
+        <mass>1000</mass>
+        <inertia>
+          <ixx>16.6667</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>16.6667</iyy>
+          <iyz>0</iyz>
+          <izz>16.6667</izz>
+        </inertia>
+        <pose>0 0 0 0 -0 0</pose>
+      </inertial>
+      <collision name='collision'>
+        <!-- <pose>0 0 -0.5 0 -0 0</pose> -->
+        <geometry>
+          <box>
+            <!-- <size>0.00001 0.00001 0.00001</size> -->
+            <size>1 1 1</size>
+          </box>
+        </geometry>
+        <max_contacts>3</max_contacts>
+      </collision>
+      <visual name='visual'>
+        <geometry>
+          <box>
+            <size>1 1 1</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Wood</name>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+          </script>
+        </material>
+      </visual>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+  </model>
+</sdf>
