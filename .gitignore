@@ -2,3 +2,7 @@
 **/__pycache__
 *.zip
 *.pkl
+!kobuki_maze/kobuki_maze_rl/models/empty/td3/trained_model.zip
+!kobuki_maze/kobuki_maze_rl/models/empty/sac/trained_model.zip
+!kobuki_maze/kobuki_maze_rl/models/dynamic/td3/trained_model.zip
+!kobuki_maze/kobuki_maze_rl/models/maze/td3/trained_model.zip
