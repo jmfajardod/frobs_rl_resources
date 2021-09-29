@@ -7,7 +7,7 @@ import rospy
 import rospkg
 import sys
 from frobs_rl.common import ros_gazebo
-from frobs_rl.common.ros_node import ROS_Kill_All_processes
+from frobs_rl.common import ros_node
 from frobs_rl.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
 from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
 from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
@@ -21,8 +21,11 @@ from frobs_rl.models.dqn import DQN
 
 if __name__ == '__main__':
 
+    # Kill all processes related to previous runs
+    ros_node.ros_kill_all_processes()
+
     # Launch Gazebo 
-    ros_gazebo.Launch_Gazebo(paused=True, gui=False)
+    ros_gazebo.launch_Gazebo(paused=True, gui=False)
 
     # Start node
     rospy.logwarn("Start")

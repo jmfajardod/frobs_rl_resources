@@ -40,7 +40,7 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Load YAML param file
         """
-        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
+        ros_params.ros_load_yaml_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
         self.get_params()
 
         """
@@ -130,7 +130,7 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         init_robot_pos = self.robot_pos_space.sample()
         rospy.logwarn("Initial Robot Position->>>" + "X: " + str(init_robot_pos[0]) + " Y: " + str(init_robot_pos[1]) + " Theta: " + str(init_robot_pos[2]))
         quat = quaternion_from_euler(0.0, 0.0, init_robot_pos[2])
-        ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=init_robot_pos[0], pos_y=init_robot_pos[1], pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state("kobuki_robot", pos_x=init_robot_pos[0], pos_y=init_robot_pos[1], pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
 
         # Set goal position
@@ -285,11 +285,11 @@ class KobukiEmptyEnv(kobuki_lidar_env.KobukiLIDAREnv):
         #--- Get Gazebo physics parameters
         if rospy.has_param('/kobuki_maze/time_step'):
             self.t_step = rospy.get_param('/kobuki_maze/time_step')
-            ros_gazebo.Gazebo_set_time_step(self.t_step)
+            ros_gazebo.gazebo_set_time_step(self.t_step)
 
         if rospy.has_param('/kobuki_maze/update_rate_multiplier'):
             self.max_update_rate = rospy.get_param('/kobuki_maze/update_rate_multiplier')
-            ros_gazebo.Gazebo_set_max_update_rate(self.max_update_rate)
+            ros_gazebo.gazebo_set_max_update_rate(self.max_update_rate)
 
     def calculate_if_done(self, goal, current_pos):
         """

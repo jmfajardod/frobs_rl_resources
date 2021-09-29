@@ -48,7 +48,7 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         * MoveIt! : MoveIt! action server is used to send the joint positions to the robot.
         """
         rospy.loginfo("Starting ABBIRB120MoveIt Env")
-        ros_gazebo.Gazebo_unpause_physics()
+        ros_gazebo.gazebo_unpause_physics()
 
         """
         Robot model and controllers parameters
@@ -127,7 +127,7 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         Init MoveIt
         """
         
-        ros_launch.ROS_Launch_from_pkg("abb_irb120_reacher","moveit_init.launch", args=["namespace:="+str(self.namespace)])
+        ros_launch.ros_launch_from_pkg("abb_irb120_reacher","moveit_init.launch", args=["namespace:="+str(self.namespace)])
         rospy.wait_for_service("/move_group/trajectory_execution/set_parameters")
         print(rostopic.get_topic_type("/planning_scene", blocking=True))
         print(rostopic.get_topic_type("/move_group/status", blocking=True))
@@ -144,7 +144,7 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         Finished __init__ method
         """
         rospy.loginfo("Finished Init of ABBIRB120MoveIt Env")
-        ros_gazebo.Gazebo_pause_physics()
+        ros_gazebo.gazebo_pause_physics()
 
     #------------------------------------------#
     #   Custom methods for the CustomRobotEnv  #
@@ -161,7 +161,7 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         """
         Function to check if the joint states are received
         """
-        ros_gazebo.Gazebo_unpause_physics()
+        ros_gazebo.gazebo_unpause_physics()
         print( rostopic.get_topic_type(self.joint_state_topic, blocking=True))
         rospy.logdebug("Current "+ self.joint_state_topic +" READY=>" + str(self.joint_state))
             
@@ -245,9 +245,9 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         """
         Returns geometry_msgs/PoseStamped
         """
-        ros_gazebo.Gazebo_unpause_physics()
+        ros_gazebo.gazebo_unpause_physics()
         gripper_pose = self.move_abb_object.ee_pose()
-        ros_gazebo.Gazebo_pause_physics()
+        ros_gazebo.gazebo_pause_physics()
         return gripper_pose
 
     def get_ee_rpy(self):
@@ -258,9 +258,9 @@ class ABBIRB120MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         return gripper_rpy
 
     def get_joint_angles(self):
-        ros_gazebo.Gazebo_unpause_physics()
+        ros_gazebo.gazebo_unpause_physics()
         joint_angles = self.move_abb_object.joint_angles()
-        ros_gazebo.Gazebo_pause_physics()
+        ros_gazebo.gazebo_pause_physics()
         return joint_angles
 
     def check_goal(self, goal):

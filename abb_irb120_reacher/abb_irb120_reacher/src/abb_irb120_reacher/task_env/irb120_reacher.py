@@ -42,7 +42,7 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         """
         Load YAML param file
         """
-        ros_params.ROS_Load_YAML_from_pkg("abb_irb120_reacher", "reacher_task.yaml", ns="/")
+        ros_params.ros_load_yaml_from_pkg("abb_irb120_reacher", "reacher_task.yaml", ns="/")
         self.get_params()
 
         """
@@ -119,7 +119,7 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         self.pub_marker = rospy.Publisher("goal_point",Marker,queue_size=10)
         self.goal_subs  = rospy.Subscriber("goal_pos", Point, self.goal_callback)
         if self.training:
-            ros_node.ROS_Node_from_pkg("abb_irb120_reacher", "pos_publisher.py", name="pos_publisher", ns="/")
+            ros_node.ros_node_from_pkg("abb_irb120_reacher", "pos_publisher.py", name="pos_publisher", ns="/")
             rospy.wait_for_service("set_init_point")
             self.set_init_goal_client = rospy.ServiceProxy("set_init_point", SetLinkState)
 
@@ -360,11 +360,11 @@ class ABBIRB120ReacherEnv(abb_irb120_moveit.ABBIRB120MoveItEnv):
         #--- Get Gazebo physics parameters
         if rospy.has_param('/irb120/time_step'):
             self.t_step = rospy.get_param('/irb120/time_step')
-            ros_gazebo.Gazebo_set_time_step(self.t_step)
+            ros_gazebo.gazebo_set_time_step(self.t_step)
 
         if rospy.has_param('/irb120/update_rate_multiplier'):
             self.max_update_rate = rospy.get_param('/irb120/update_rate_multiplier')
-            ros_gazebo.Gazebo_set_max_update_rate(self.max_update_rate)
+            ros_gazebo.gazebo_set_max_update_rate(self.max_update_rate)
 
 
     def get_elapsed_time(self):
