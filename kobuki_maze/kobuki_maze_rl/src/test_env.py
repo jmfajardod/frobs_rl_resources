@@ -9,6 +9,8 @@ from frobs_rl.wrappers.NormalizeActionWrapper import NormalizeActionWrapper
 from frobs_rl.wrappers.TimeLimitWrapper import TimeLimitWrapper
 from frobs_rl.wrappers.NormalizeObservWrapper import NormalizeObservWrapper
 
+from kobuki_maze_rl.task_env import kobuki_empty
+from kobuki_maze_rl.task_env import kobuki_dynamic_v3
 from kobuki_maze_rl.task_env import kobuki_maze
 
 from tf.transformations import quaternion_from_euler
@@ -30,6 +32,8 @@ if __name__ == '__main__':
     rospy.init_node('kobuki_maze_test')
 
     # Launch env
+    # env = gym.make('KobukiEmptyEnv-v0')
+    # env = gym.make('KobukiDynamicEnv-v3')
     env = gym.make('KobukiMazeEnv-v0')
 
     # Check env

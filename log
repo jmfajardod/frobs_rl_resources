@@ -1,0 +1,102 @@
+[rospy.client][INFO] 2021-09-29 15:54:53,498: init_node, name[/pos_publisher], pid[14875]
+[xmlrpc][INFO] 2021-09-29 15:54:53,499: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2021-09-29 15:54:53,499: Started XML-RPC server [http://192.168.0.14:41577/]
+[rospy.init][INFO] 2021-09-29 15:54:53,499: ROS Slave URI: [http://192.168.0.14:41577/]
+[rospy.impl.masterslave][INFO] 2021-09-29 15:54:53,499: _ready: http://192.168.0.14:41577/
+[rospy.registration][INFO] 2021-09-29 15:54:53,500: Registering with master node http://192.168.0.14:11311
+[xmlrpc][INFO] 2021-09-29 15:54:53,500: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2021-09-29 15:54:53,599: registered with master
+[rospy.rosout][INFO] 2021-09-29 15:54:53,600: initializing /rosout core topic
+[rospy.rosout][INFO] 2021-09-29 15:54:53,602: connected to core topic /rosout
+[rospy.simtime][INFO] 2021-09-29 15:54:53,603: initializing /clock core topic
+[rospy.simtime][INFO] 2021-09-29 15:54:53,604: connected to core topic /clock
+[rospy.internal][INFO] 2021-09-29 15:54:53,606: topic[/clock] adding connection to [http://192.168.0.14:35833/], count 0
+[rospy.internal][INFO] 2021-09-29 15:54:53,622: topic[/goal_pos] adding connection to [/test_irb120_reacher], count 0
+[rospy.internal][INFO] 2021-09-29 15:54:53,820: topic[/rosout] adding connection to [/rosout], count 0
+[rosout][WARNING] 2021-09-29 15:55:36,431: Inbound TCP/IP connection failed: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details.
+[rospy.internal][ERROR] 2021-09-29 15:55:36,433: Inbound TCP/IP connection failed:
+Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 327, in _tcp_server_callback
+    header = read_ros_handshake_header(sock, BytesIO(), buff_size)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rosgraph/network.py", line 359, in read_ros_handshake_header
+    raise ROSHandshakeException("connection from sender terminated before handshake header received. %s bytes were received. Please check sender for additional details."%b.tell())
+rosgraph.network.ROSHandshakeException: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details.
+
+[rospy.internal][INFO] 2021-09-29 15:55:36,614: topic[/goal_pos] removing connection to /test_irb120_reacher
+[rospy.core][INFO] 2021-09-29 15:56:17,480: signal_shutdown [signal-2]
+[rospy.internal][INFO] 2021-09-29 15:56:17,482: topic[/rosout] removing connection to /rosout
+[rospy.internal][INFO] 2021-09-29 15:56:17,482: topic[/clock] removing connection to http://192.168.0.14:35833/
+[rospy.impl.masterslave][INFO] 2021-09-29 15:56:17,483: signal-2
+[rospy.internal][WARNING] 2021-09-29 15:56:17,483: Unknown error initiating TCP/IP socket to 192.168.0.14:40891 (http://192.168.0.14:35833/): Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 562, in connect
+    self.read_header()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 657, in read_header
+    self._validate_header(read_ros_handshake_header(sock, self.read_buff, self.protocol.buff_size))
+AttributeError: 'NoneType' object has no attribute 'buff_size'
+
+[rospy.core][INFO] 2021-09-29 15:56:18,206: signal_shutdown [atexit]
+[rospy.client][INFO] 2021-09-29 15:56:55,484: init_node, name[/pos_publisher], pid[16676]
+[xmlrpc][INFO] 2021-09-29 15:56:55,485: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2021-09-29 15:56:55,485: Started XML-RPC server [http://192.168.0.14:38573/]
+[rospy.init][INFO] 2021-09-29 15:56:55,485: ROS Slave URI: [http://192.168.0.14:38573/]
+[rospy.impl.masterslave][INFO] 2021-09-29 15:56:55,485: _ready: http://192.168.0.14:38573/
+[rospy.registration][INFO] 2021-09-29 15:56:55,486: Registering with master node http://192.168.0.14:11311
+[xmlrpc][INFO] 2021-09-29 15:56:55,486: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2021-09-29 15:56:55,585: registered with master
+[rospy.rosout][INFO] 2021-09-29 15:56:55,585: initializing /rosout core topic
+[rospy.rosout][INFO] 2021-09-29 15:56:55,588: connected to core topic /rosout
+[rospy.simtime][INFO] 2021-09-29 15:56:55,589: initializing /clock core topic
+[rospy.simtime][INFO] 2021-09-29 15:56:55,590: connected to core topic /clock
+[rospy.internal][INFO] 2021-09-29 15:56:55,592: topic[/clock] adding connection to [http://192.168.0.14:43959/], count 0
+[rospy.internal][INFO] 2021-09-29 15:56:55,648: topic[/goal_pos] adding connection to [/test_irb120_reacher], count 0
+[rospy.internal][INFO] 2021-09-29 15:56:55,846: topic[/rosout] adding connection to [/rosout], count 0
+[rosout][WARNING] 2021-09-29 15:57:19,132: Inbound TCP/IP connection failed: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details.
+[rospy.internal][ERROR] 2021-09-29 15:57:19,133: Inbound TCP/IP connection failed:
+Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 327, in _tcp_server_callback
+    header = read_ros_handshake_header(sock, BytesIO(), buff_size)
+  File "/opt/ros/noetic/lib/python3/dist-packages/rosgraph/network.py", line 359, in read_ros_handshake_header
+    raise ROSHandshakeException("connection from sender terminated before handshake header received. %s bytes were received. Please check sender for additional details."%b.tell())
+rosgraph.network.ROSHandshakeException: connection from sender terminated before handshake header received. 0 bytes were received. Please check sender for additional details.
+
+[rospy.internal][INFO] 2021-09-29 15:57:19,597: topic[/goal_pos] removing connection to /test_irb120_reacher
+[rospy.core][INFO] 2021-09-29 15:57:38,610: signal_shutdown [signal-2]
+[rospy.internal][INFO] 2021-09-29 15:57:38,612: topic[/rosout] removing connection to /rosout
+[rospy.internal][INFO] 2021-09-29 15:57:38,612: topic[/clock] removing connection to http://192.168.0.14:43959/
+[rospy.impl.masterslave][INFO] 2021-09-29 15:57:38,613: signal-2
+[rospy.internal][WARNING] 2021-09-29 15:57:38,613: Unknown error initiating TCP/IP socket to 192.168.0.14:51857 (http://192.168.0.14:43959/): Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 562, in connect
+    self.read_header()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 657, in read_header
+    self._validate_header(read_ros_handshake_header(sock, self.read_buff, self.protocol.buff_size))
+AttributeError: 'NoneType' object has no attribute 'buff_size'
+
+[rospy.core][INFO] 2021-09-29 15:57:39,372: signal_shutdown [atexit]
+[rospy.client][INFO] 2021-09-29 15:58:48,272: init_node, name[/pos_publisher], pid[18184]
+[xmlrpc][INFO] 2021-09-29 15:58:48,272: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2021-09-29 15:58:48,272: Started XML-RPC server [http://192.168.0.14:37535/]
+[rospy.init][INFO] 2021-09-29 15:58:48,272: ROS Slave URI: [http://192.168.0.14:37535/]
+[rospy.impl.masterslave][INFO] 2021-09-29 15:58:48,273: _ready: http://192.168.0.14:37535/
+[rospy.registration][INFO] 2021-09-29 15:58:48,273: Registering with master node http://192.168.0.14:11311
+[xmlrpc][INFO] 2021-09-29 15:58:48,273: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2021-09-29 15:58:48,373: registered with master
+[rospy.rosout][INFO] 2021-09-29 15:58:48,373: initializing /rosout core topic
+[rospy.rosout][INFO] 2021-09-29 15:58:48,376: connected to core topic /rosout
+[rospy.simtime][INFO] 2021-09-29 15:58:48,376: initializing /clock core topic
+[rospy.simtime][INFO] 2021-09-29 15:58:48,378: connected to core topic /clock
+[rospy.internal][INFO] 2021-09-29 15:58:48,379: topic[/clock] adding connection to [http://192.168.0.14:40259/], count 0
+[rospy.internal][INFO] 2021-09-29 15:58:48,424: topic[/goal_pos] adding connection to [/test_irb120_reacher], count 0
+[rospy.internal][INFO] 2021-09-29 15:58:48,622: topic[/rosout] adding connection to [/rosout], count 0
+[rospy.internal][INFO] 2021-09-29 15:59:11,384: topic[/goal_pos] removing connection to /test_irb120_reacher
+[rospy.core][INFO] 2021-09-29 15:59:42,860: signal_shutdown [signal-2]
+[rospy.internal][INFO] 2021-09-29 15:59:42,862: topic[/rosout] removing connection to /rosout
+[rospy.internal][INFO] 2021-09-29 15:59:42,862: topic[/clock] removing connection to http://192.168.0.14:40259/
+[rospy.impl.masterslave][INFO] 2021-09-29 15:59:42,863: signal-2
+[rospy.internal][WARNING] 2021-09-29 15:59:42,863: Unknown error initiating TCP/IP socket to 192.168.0.14:38411 (http://192.168.0.14:40259/): Traceback (most recent call last):
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 562, in connect
+    self.read_header()
+  File "/opt/ros/noetic/lib/python3/dist-packages/rospy/impl/tcpros_base.py", line 657, in read_header
+    self._validate_header(read_ros_handshake_header(sock, self.read_buff, self.protocol.buff_size))
+AttributeError: 'NoneType' object has no attribute 'buff_size'
+
+[rospy.core][INFO] 2021-09-29 15:59:43,604: signal_shutdown [atexit]
