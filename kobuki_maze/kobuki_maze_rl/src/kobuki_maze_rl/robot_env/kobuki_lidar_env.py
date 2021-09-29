@@ -94,9 +94,9 @@ class KobukiLIDAREnv(robot_BasicEnv.RobotBasicEnv):
         """
         If using the __check_subs_and_pubs_connection method, then un-comment the lines below.
         """
-        ros_gazebo.Gazebo_unpause_physics()
+        ros_gazebo.gazebo_unpause_physics()
         self._check_subs_and_pubs_connection()
-        ros_gazebo.Gazebo_pause_physics()
+        ros_gazebo.gazebo_pause_physics()
 
         """
         Finished __init__ method

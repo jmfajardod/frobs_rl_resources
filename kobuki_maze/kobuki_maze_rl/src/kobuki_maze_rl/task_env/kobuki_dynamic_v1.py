@@ -40,7 +40,7 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         """
         Load YAML param file
         """
-        ros_params.ROS_Load_YAML_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
+        ros_params.ros_load_yaml_from_pkg("kobuki_maze_rl", "dynamic_obj_task.yaml", ns="/")
         self.get_params()
 
         """
@@ -110,15 +110,15 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.tf_listener = tf.TransformListener()
 
         # Spawn the objects
-        UnitBox = ros_urdf.URDF_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Box")
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box1", pos_x=-13.0, pos_y= 13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box2", pos_x=  0.0, pos_y= 13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box3", pos_x= 13.0, pos_y= 13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box4", pos_x= 13.0, pos_y=  0.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box5", pos_x= 13.0, pos_y=-13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box6", pos_x=  0.0, pos_y=-13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box7", pos_x=-13.0, pos_y=-13.0)
-        ros_gazebo.Gazebo_spawn_sdf_string(UnitBox, model_name="box8", pos_x=-13.0, pos_y=  0.0)
+        UnitBox = ros_urdf.urdf_parse_from_pkg("kobuki_maze_rl", "model.sdf", folder="/worlds/Box")
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box1", pos_x=-13.0, pos_y= 13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box2", pos_x=  0.0, pos_y= 13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box3", pos_x= 13.0, pos_y= 13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box4", pos_x= 13.0, pos_y=  0.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box5", pos_x= 13.0, pos_y=-13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box6", pos_x=  0.0, pos_y=-13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box7", pos_x=-13.0, pos_y=-13.0)
+        ros_gazebo.gazebo_spawn_sdf_string(UnitBox, model_name="box8", pos_x=-13.0, pos_y=  0.0)
 
         self.init_box_traj = True
         self.box_traj_dir  = 1
@@ -151,33 +151,33 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         # Set the initial position of the robot
         
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state("kobuki_robot", pos_x=0.0, pos_y=0.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state("kobuki_robot", pos_x=0.0, pos_y=0.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
 
         # Set boxes initial positions
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box1", ref_frame="world", pos_x=-13.0, pos_y= 13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box1", ref_frame="world", pos_x=-13.0, pos_y= 13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box2", ref_frame="world", pos_x=  0.0, pos_y= 13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box2", ref_frame="world", pos_x=  0.0, pos_y= 13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box3", ref_frame="world", pos_x= 13.0, pos_y= 13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box3", ref_frame="world", pos_x= 13.0, pos_y= 13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box4", ref_frame="world", pos_x= 13.0, pos_y=  0.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box4", ref_frame="world", pos_x= 13.0, pos_y=  0.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box5", ref_frame="world", pos_x= 13.0, pos_y=-13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box5", ref_frame="world", pos_x= 13.0, pos_y=-13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box6", ref_frame="world", pos_x=  0.0, pos_y=-13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box6", ref_frame="world", pos_x=  0.0, pos_y=-13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box7", ref_frame="world", pos_x=-13.0, pos_y=-13.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box7", ref_frame="world", pos_x=-13.0, pos_y=-13.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
         quat = quaternion_from_euler(0.0, 0.0, self.angle_space.sample())
-        ros_gazebo.Gazebo_set_model_state( "box8", ref_frame="world", pos_x=-13.0, pos_y=  0.0, pos_z=0.0,
+        ros_gazebo.gazebo_set_model_state( "box8", ref_frame="world", pos_x=-13.0, pos_y=  0.0, pos_z=0.0,
                                             ori_x=quat[0], ori_y=quat[1], ori_z=quat[2], ori_w=quat[3])
 
         self.init_box_traj = True
@@ -304,14 +304,14 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
                 self.box_traj_dir *= -1 
                 self.box_traj_count = 0
 
-        ros_gazebo.Gazebo_set_model_state("box1", ref_frame="box1", pos_x=self.box_traj_dir*self.box1_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box2", ref_frame="box2", pos_x=self.box_traj_dir*self.box2_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box3", ref_frame="box3", pos_x=self.box_traj_dir*self.box3_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box4", ref_frame="box4", pos_x=self.box_traj_dir*self.box4_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box5", ref_frame="box5", pos_x=self.box_traj_dir*self.box5_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box6", ref_frame="box6", pos_x=self.box_traj_dir*self.box6_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box7", ref_frame="box7", pos_x=self.box_traj_dir*self.box7_step, sleep_time=0.0)
-        ros_gazebo.Gazebo_set_model_state("box8", ref_frame="box8", pos_x=self.box_traj_dir*self.box8_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box1", ref_frame="box1", pos_x=self.box_traj_dir*self.box1_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box2", ref_frame="box2", pos_x=self.box_traj_dir*self.box2_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box3", ref_frame="box3", pos_x=self.box_traj_dir*self.box3_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box4", ref_frame="box4", pos_x=self.box_traj_dir*self.box4_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box5", ref_frame="box5", pos_x=self.box_traj_dir*self.box5_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box6", ref_frame="box6", pos_x=self.box_traj_dir*self.box6_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box7", ref_frame="box7", pos_x=self.box_traj_dir*self.box7_step, sleep_time=0.0)
+        ros_gazebo.gazebo_set_model_state("box8", ref_frame="box8", pos_x=self.box_traj_dir*self.box8_step, sleep_time=0.0)
 
         return done
 
@@ -375,11 +375,11 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         #--- Get Gazebo physics parameters
         if rospy.has_param('/kobuki_maze/time_step'):
             self.t_step = rospy.get_param('/kobuki_maze/time_step')
-            ros_gazebo.Gazebo_set_time_step(self.t_step)
+            ros_gazebo.gazebo_set_time_step(self.t_step)
 
         if rospy.has_param('/kobuki_maze/update_rate_multiplier'):
             self.max_update_rate = rospy.get_param('/kobuki_maze/update_rate_multiplier')
-            ros_gazebo.Gazebo_set_max_update_rate(self.max_update_rate)
+            ros_gazebo.gazebo_set_max_update_rate(self.max_update_rate)
 
     def calculate_if_done(self, goal, current_pos):
         """

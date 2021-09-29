@@ -16,10 +16,10 @@ from stable_baselines3.common.env_checker import check_env
 if __name__ == '__main__':
 
     # Kill all processes related to previous runs
-    ros_node.ROS_Kill_All_processes()
+    ros_node.ros_kill_all_processes()
 
     # Launch Gazebo 
-    ros_gazebo.Launch_Gazebo(paused=True, pub_clock_frequency=100)
+    ros_gazebo.launch_Gazebo(paused=True, pub_clock_frequency=100)
 
     # Start node
     rospy.logwarn("Start")
