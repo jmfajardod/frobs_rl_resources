@@ -6,3 +6,5 @@
 !kobuki_maze/kobuki_maze_rl/models/empty/sac/trained_model.zip
 !kobuki_maze/kobuki_maze_rl/models/dynamic/td3/trained_model.zip
 !kobuki_maze/kobuki_maze_rl/models/maze/td3/trained_model.zip
+!abb_irb120_reacher/abb_irb120_reacher/models/static_reacher/ppo/trained_model.zip
+!abb_irb120_reacher/abb_irb120_reacher/models/static_reacher/td3/trained_model.zip

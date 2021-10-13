@@ -54,9 +54,11 @@ if __name__ == '__main__':
     # model = DDPG(env, save_path, log_path, config_file_pkg="abb_irb120_reacher", config_filename="ddpg.yaml")
     
     #-- TD3
-    save_path = pkg_path + "/models/td3/"
-    log_path = pkg_path + "/logs/td3/"
-    model = TD3(env, save_path, log_path, config_file_pkg="abb_irb120_reacher", config_filename="td3.yaml")
+    # save_path = pkg_path + "/models/td3/"
+    # log_path = pkg_path + "/logs/td3/"
+    save_path = pkg_path + "/models/static_reacher/td3/"
+    log_path = pkg_path + "/logs/aux/td3/"
+    model = TD3(env, save_path, log_path, config_file_pkg="abb_irb120_reacher", config_filename="td3_aux.yaml")
 
     #-- SAC
     # save_path = pkg_path + "/models/static_reacher/sac/"
