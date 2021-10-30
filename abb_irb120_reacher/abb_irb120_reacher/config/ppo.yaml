@@ -1,25 +1,25 @@
 model_params:
 
   # Training 
-  training_steps: 5000      # The number of training steps to perform
+  training_steps: 100000      # The number of training steps to perform
 
   # Save params
-  save_freq: 1000
+  save_freq: 5000
   save_prefix: ppo_model
   trained_model_name: trained_model
-  save_replay_buffer: False
+  save_replay_buffer: False # PPO does not support saving replay buffer
 
   # Load model params
   load_model: True
-  model_name: ppo_model_5000_steps
+  model_name: trained_model_01_10_2021_15_30_30
 
   # Logging parameters
-  log_folder: PPO_2
-  log_interval: 4 # The number of episodes between logs
+  log_folder: PPO_5
+  log_interval: 1 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 
   # Use custom policy - Only MlpPolicy is supported (Only used when new model is created)
-  use_custom_policy: False
+  use_custom_policy: True
   policy_params:
     net_arch: [400, 300] # List of hidden layer sizes
     activation_fn: relu  # relu, tanh, elu or selu
