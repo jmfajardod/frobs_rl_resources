@@ -1,0 +1,113 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+ 	<!--Joints-->
+	<!--joint_1-->
+	<joint name="joint_1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1000" lower="-3.1416" upper="3.1416" velocity="2.618"/>
+  </joint>
+  <transmission name="trans_joint_1">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_1">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_1">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+	<!--joint_2-->
+	<joint name="joint_2" type="revolute">
+    <origin rpy="0 0 0" xyz="0.070 0 0.352"/>
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1000" lower="-0.7853" upper="1.5708" velocity="2.618"/>
+  </joint>
+  <transmission name="trans_joint_2">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_2">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_2">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+	<!--joint_3-->
+	<joint name="joint_3" type="revolute">
+    <origin rpy="0 0 0" xyz="0 -0.065 0.360"/>
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1000" lower="-2.4434" upper="0.8726" velocity="2.618"/>
+  </joint>
+  <transmission name="trans_joint_3">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_3">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_3">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+	<!--joint_4-->
+	<joint name="joint_4" type="revolute">
+    <origin rpy="0 0 0" xyz="0.239 0.065 0"/>
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1000" lower="-3.49" upper="3.49" velocity="6.2832"/>
+  </joint>
+  <transmission name="trans_joint_4">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_4">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_4">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+	<!--joint_5-->
+	<joint name="joint_5" type="revolute">
+    <origin rpy="0 0 0" xyz="0.141 0 0"/>
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1000" lower="-2.0071" upper="2.0071" velocity="6.2832"/>
+  </joint>
+  <transmission name="trans_joint_5">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_5">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_5">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+	<!--joint_6-->
+	<joint name="joint_6" type="revolute">
+    <origin rpy="0 0 0" xyz="0.065 0 0"/>
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1000" lower="-6.9813" upper="6.9813" velocity="1"/>
+  </joint>
+  <transmission name="trans_joint_6">
+		<type>transmission_interface/SimpleTransmission</type>
+		<joint name="joint_6">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+		</joint>
+		<actuator name="motor_joint_6">
+			<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+  </transmission>
+
+</robot>

@@ -1,0 +1,16 @@
+<launch>
+
+	<param name="robot_description" command="$(find xacro)/xacro '$(find abb_irb140)/urdf/irb140.xacro'"/>
+
+	<!-- combine joint values -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+	<!-- Show in Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find abb_irb140)/config/rviz/rviz_config.rviz"/>
+
+	<!-- send joint values -->
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+	  <param name="use_gui" value="True"/>
+	</node>
+
+</launch>
