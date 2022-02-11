@@ -481,3 +481,110 @@ AttributeError: 'NoneType' object has no attribute 'close'
 OSError: [Errno 9] Bad file descriptor
 
 [rospy.core][INFO] 2022-02-09 19:11:04,229: signal_shutdown [atexit]
+[rospy.client][INFO] 2022-02-10 21:54:34,768: init_node, name[/pos_publisher], pid[53763]
+[xmlrpc][INFO] 2022-02-10 21:54:34,768: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 21:54:34,768: Started XML-RPC server [http://unal-v2:45233/]
+[rospy.impl.masterslave][INFO] 2022-02-10 21:54:34,768: _ready: http://unal-v2:45233/
+[rospy.init][INFO] 2022-02-10 21:54:34,769: ROS Slave URI: [http://unal-v2:45233/]
+[rospy.registration][INFO] 2022-02-10 21:54:34,769: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 21:54:34,769: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 21:54:34,869: registered with master
+[rospy.rosout][INFO] 2022-02-10 21:54:34,869: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 21:54:34,872: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 21:54:34,873: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 21:54:34,875: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 21:54:34,876: topic[/clock] adding connection to [http://unal-v2:35657/], count 0
+[rospy.core][INFO] 2022-02-10 21:54:35,010: signal_shutdown [atexit]
+[rospy.internal][INFO] 2022-02-10 21:54:35,012: topic[/clock] removing connection to http://unal-v2:35657/
+[rospy.impl.masterslave][INFO] 2022-02-10 21:54:35,013: atexit
+[rospy.client][INFO] 2022-02-10 21:57:07,703: init_node, name[/pos_publisher], pid[54600]
+[xmlrpc][INFO] 2022-02-10 21:57:07,704: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 21:57:07,704: Started XML-RPC server [http://unal-v2:36825/]
+[rospy.impl.masterslave][INFO] 2022-02-10 21:57:07,704: _ready: http://unal-v2:36825/
+[rospy.init][INFO] 2022-02-10 21:57:07,704: ROS Slave URI: [http://unal-v2:36825/]
+[rospy.registration][INFO] 2022-02-10 21:57:07,704: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 21:57:07,705: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 21:57:07,805: registered with master
+[rospy.rosout][INFO] 2022-02-10 21:57:07,805: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 21:57:07,808: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 21:57:07,809: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 21:57:07,810: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 21:57:07,811: topic[/clock] adding connection to [http://unal-v2:34791/], count 0
+[rospy.core][INFO] 2022-02-10 21:57:07,941: signal_shutdown [atexit]
+[rospy.internal][INFO] 2022-02-10 21:57:07,943: topic[/clock] removing connection to http://unal-v2:34791/
+[rospy.impl.masterslave][INFO] 2022-02-10 21:57:07,943: atexit
+[rospy.client][INFO] 2022-02-10 21:58:03,121: init_node, name[/pos_publisher], pid[55196]
+[xmlrpc][INFO] 2022-02-10 21:58:03,121: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 21:58:03,121: Started XML-RPC server [http://unal-v2:33629/]
+[rospy.impl.masterslave][INFO] 2022-02-10 21:58:03,121: _ready: http://unal-v2:33629/
+[rospy.init][INFO] 2022-02-10 21:58:03,122: ROS Slave URI: [http://unal-v2:33629/]
+[rospy.registration][INFO] 2022-02-10 21:58:03,122: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 21:58:03,122: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 21:58:03,222: registered with master
+[rospy.rosout][INFO] 2022-02-10 21:58:03,223: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 21:58:03,227: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 21:58:03,228: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 21:58:03,230: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 21:58:03,232: topic[/clock] adding connection to [http://unal-v2:39217/], count 0
+[rospy.internal][INFO] 2022-02-10 21:58:03,322: topic[/goal_pos] adding connection to [/train_ur5_reacher], count 0
+[rospy.internal][INFO] 2022-02-10 21:58:03,518: topic[/rosout] adding connection to [/rosout], count 0
+[rospy.client][INFO] 2022-02-10 22:05:34,986: init_node, name[/pos_publisher], pid[56575]
+[xmlrpc][INFO] 2022-02-10 22:05:34,987: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 22:05:34,987: Started XML-RPC server [http://unal-v2:37065/]
+[rospy.init][INFO] 2022-02-10 22:05:34,987: ROS Slave URI: [http://unal-v2:37065/]
+[rospy.impl.masterslave][INFO] 2022-02-10 22:05:34,987: _ready: http://unal-v2:37065/
+[rospy.registration][INFO] 2022-02-10 22:05:34,988: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 22:05:34,988: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 22:05:35,087: registered with master
+[rospy.rosout][INFO] 2022-02-10 22:05:35,088: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 22:05:35,092: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 22:05:35,093: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 22:05:35,094: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 22:05:35,096: topic[/clock] adding connection to [http://unal-v2:45259/], count 0
+[rospy.internal][INFO] 2022-02-10 22:05:35,166: topic[/goal_pos] adding connection to [/train_ur5_reacher], count 0
+[rospy.internal][INFO] 2022-02-10 22:05:35,363: topic[/rosout] adding connection to [/rosout], count 0
+[rospy.client][INFO] 2022-02-10 22:07:37,294: init_node, name[/pos_publisher], pid[60978]
+[xmlrpc][INFO] 2022-02-10 22:07:37,295: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 22:07:37,295: Started XML-RPC server [http://unal-v2:42411/]
+[rospy.init][INFO] 2022-02-10 22:07:37,295: ROS Slave URI: [http://unal-v2:42411/]
+[rospy.impl.masterslave][INFO] 2022-02-10 22:07:37,296: _ready: http://unal-v2:42411/
+[rospy.registration][INFO] 2022-02-10 22:07:37,296: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 22:07:37,297: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 22:07:37,396: registered with master
+[rospy.rosout][INFO] 2022-02-10 22:07:37,396: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 22:07:37,402: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 22:07:37,404: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 22:07:37,407: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 22:07:37,410: topic[/clock] adding connection to [http://unal-v2:38723/], count 0
+[rospy.internal][INFO] 2022-02-10 22:07:37,493: topic[/goal_pos] adding connection to [/train_ur5_reacher], count 0
+[rospy.internal][INFO] 2022-02-10 22:07:37,683: topic[/rosout] adding connection to [/rosout], count 0
+[rospy.client][INFO] 2022-02-10 22:10:21,512: init_node, name[/pos_publisher], pid[63828]
+[xmlrpc][INFO] 2022-02-10 22:10:21,513: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 22:10:21,513: Started XML-RPC server [http://unal-v2:42791/]
+[rospy.init][INFO] 2022-02-10 22:10:21,513: ROS Slave URI: [http://unal-v2:42791/]
+[rospy.impl.masterslave][INFO] 2022-02-10 22:10:21,513: _ready: http://unal-v2:42791/
+[rospy.registration][INFO] 2022-02-10 22:10:21,514: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 22:10:21,514: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 22:10:21,613: registered with master
+[rospy.rosout][INFO] 2022-02-10 22:10:21,614: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 22:10:21,617: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 22:10:21,619: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 22:10:21,621: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 22:10:21,624: topic[/clock] adding connection to [http://unal-v2:33951/], count 0
+[rospy.internal][INFO] 2022-02-10 22:10:21,653: topic[/goal_pos] adding connection to [/train_ur5_reacher], count 0
+[rospy.internal][INFO] 2022-02-10 22:10:21,851: topic[/rosout] adding connection to [/rosout], count 0
+[rospy.client][INFO] 2022-02-10 22:18:27,572: init_node, name[/pos_publisher], pid[72587]
+[xmlrpc][INFO] 2022-02-10 22:18:27,573: XML-RPC server binding to 0.0.0.0:0
+[xmlrpc][INFO] 2022-02-10 22:18:27,573: Started XML-RPC server [http://unal-v2:38849/]
+[rospy.init][INFO] 2022-02-10 22:18:27,573: ROS Slave URI: [http://unal-v2:38849/]
+[rospy.impl.masterslave][INFO] 2022-02-10 22:18:27,573: _ready: http://unal-v2:38849/
+[rospy.registration][INFO] 2022-02-10 22:18:27,574: Registering with master node http://localhost:11311
+[xmlrpc][INFO] 2022-02-10 22:18:27,574: xml rpc node: starting XML-RPC server
+[rospy.init][INFO] 2022-02-10 22:18:27,674: registered with master
+[rospy.rosout][INFO] 2022-02-10 22:18:27,674: initializing /rosout core topic
+[rospy.rosout][INFO] 2022-02-10 22:18:27,678: connected to core topic /rosout
+[rospy.simtime][INFO] 2022-02-10 22:18:27,679: initializing /clock core topic
+[rospy.simtime][INFO] 2022-02-10 22:18:27,681: connected to core topic /clock
+[rospy.internal][INFO] 2022-02-10 22:18:27,682: topic[/clock] adding connection to [http://unal-v2:34143/], count 0
+[rospy.internal][INFO] 2022-02-10 22:18:27,702: topic[/goal_pos] adding connection to [/train_ur5_reacher], count 0
+[rospy.internal][INFO] 2022-02-10 22:18:27,897: topic[/rosout] adding connection to [/rosout], count 0

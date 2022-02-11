@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Arg to change robot name and be able to spawn multiple robots-->
+    <arg name="robot_name" default="/" />
+
+    <!-- Load the urdf into the parameter server. -->
+    <arg name="robot_xacro" value="$(find ur_description)/urdf/ur5_robot.urdf.xacro robot_namespace:=$(arg robot_name)" />
+
+    <param name="robot_description" command="$(find xacro)/xacro $(arg robot_xacro)" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" />
+
+    <!--Cargar mundo en gazebo-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="paused" value="false" />
+        <arg name="use_sim_time" value="true" />
+        <arg name="gui" value="true" />
+        <arg name="recording" value="false" />
+        <arg name="debug" value="false" />
+    </include>
+
+    <!--spawnear robot-->
+    <node name="ur5_gazebo_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" 
+            args="-urdf -param robot_description -model ur5 -x 0 -y 0 -z 0.01"/>
+
+    <!--Cargar controladores-->
+    <rosparam command="load" file="$(find ur_description)/cfg/controller.yaml" />
+
+    <!--Controladores-->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller
+					arm_controller" />
+
+    <node pkg="rviz" type="rviz" name="rviz_Visualization" args="-d $(find ur_description)/cfg/view_robot.rviz" />
+
+</launch>
