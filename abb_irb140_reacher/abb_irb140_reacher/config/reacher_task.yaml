@@ -10,19 +10,20 @@ irb140: #namespace
 
     # Define min and max joint values to define 
     min_joint_pos:
-      - -3.1416
-      - -0.7853
-      - -2.4434
-      - -3.49
-      - -2.0071
-      - -6.98132
+      - -3.14159 # -180  
+      - -1.7453  # -100
+      - -2.44346 # -140
+      - -3.49066 # -200
+      - -2.0071  # -115
+      - -6.28319 # -6.98132 # -400
+
     max_joint_pos:
-      - 3.1416
-      - 1.5708
-      - 0.8726
-      - 3.49
-      - 2.0071
-      - 6.98132
+      - 3.14159 # 180
+      - 1.7453  # 100
+      - 2.44346 # 140
+      - 3.49066 # 200
+      - 2.0071  # 115
+      - 6.28319 # 6.98132 # 400
 
     #-----------------------------------------------------------------------------------------#
     #--- Observation Space
@@ -38,13 +39,13 @@ irb140: #namespace
       z: -1.0
 
     position_goal_max: # Maximum XYZ position for the goal
-      x: 0.5 
+      x: 0.7 
       y: 0.5
       z: 1.0
     position_goal_min: # Minimum XYZ position for the goal
-      x: -0.5
-      y: -0.5
-      z:  0.0
+      x:  0.0
+      y:  -0.5
+      z:  0.2
       
     max_distance:     9.0 # Maximum distance from EE to the desired GOAL EE
 

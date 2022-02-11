@@ -151,7 +151,7 @@ class ABBIRB140ReacherEnv(abb_irb140_moveit.ABBIRB140MoveItEnv):
 
         #--- If training set random goal
         if self.training:
-            self.init_pos = self.get_randomJointVals()
+            # self.init_pos = self.get_randomJointVals()
             init_goal_vector = self.get_randomValidGoal()
             self.goal = init_goal_vector
             init_goal_msg = SetLinkStateRequest()
