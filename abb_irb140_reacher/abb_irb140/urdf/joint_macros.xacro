@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="m_joint" params="name type axis_xyz origin_rpy 
+                                        origin_xyz limit_lower limit_upper 
+                                        limit_vel parent child type_controller">
+        <!-- Joint  -->
+        <joint name="${name}" type="${type}">
+            <origin xyz="${origin_xyz}" rpy="${origin_rpy}" />
+            <axis xyz="${axis_xyz}" />
+            <parent link="${parent}" />
+            <child link="${child}" />
+            <limit effort="1000.0" lower="${limit_lower}" upper="${limit_upper}" velocity="${limit_vel}" />
+            <dynamics damping="0.0" friction="0.0"/>
+        </joint>
+
+        <!-- Transmission -->
+        <transmission name="${name}">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${name}">
+                <hardwareInterface>${type_controller}</hardwareInterface>
+            </joint>
+            <actuator name="${name}">
+                <hardwareInterface>${type_controller}</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+    </xacro:macro>
+
+</robot>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <!-- Launch Gazebo -->
+    <arg name="debug" default="false"/>
+    <arg name="paused" default="true"/>
+    <arg name="use_gui" default="true"/>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find abb_irb140_reacher)/worlds/no_collision.world"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="debug" value="$(arg debug)"/>
+        <arg name="paused" value="$(arg paused)"/>
+        <arg name="recording" value="false"/>
+        <arg name="gui" default="$(arg use_gui)"/>
+        <arg name="server_required" value="true"/>
+    </include>
+
+    <!-- Launch Env -->
+    <node pkg="abb_irb140_reacher" type="test.py" name="reacher" />
+
+</launch>

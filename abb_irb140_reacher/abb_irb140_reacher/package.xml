@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>abb_irb140_reacher</name>
+  <version>0.0.1</version>
+  <description>The abb_irb140_reacher package</description>
+
+  <maintainer email="jmfajardod@unal.edu.co">Jose Fajardo</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>frobs_rl</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>control_msgs</build_depend>
+
+  <build_export_depend>frobs_rl</build_export_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>control_msgs</build_export_depend>
+
+  <exec_depend>frobs_rl</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export></export>
+  
+</package>

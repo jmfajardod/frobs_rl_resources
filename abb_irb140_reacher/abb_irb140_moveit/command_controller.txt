@@ -1,0 +1,8 @@
+rosservice call /controller_manager/load_controller "name: 'arm140_group_controller'" 
+
+rosservice call /controller_manager/switch_controller "start_controllers: ['arm140_group_controller']
+stop_controllers: ['arm140_controller']
+strictness: 1
+start_asap: false
+timeout: 3.0"
+

@@ -1,0 +1,92 @@
+irb140: #namespace
+
+    #--- Task Related parameters
+    n_actions: 6 # The actions are the joint positions
+    n_observations: 10 # The observations are XYZ positions of the TCP and the distance to GOAL
+    max_steps: 10000
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Action Space
+
+    limit_joint_vel:  
+      - 0.2 #2.618
+      - 0.2 #2.618
+      - 0.2 #2.618
+      - 0.2 #6.2832
+      - 0.2 #6.2832
+      - 0.2 #6.2832
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Observation Space
+    
+    # Set
+    position_ee_max: # Maximum XYZ position for the EE
+      x: 1.5
+      y: 1.5
+      z: 2.0
+    position_ee_min: # Minimum XYZ position for the EE
+      x: -1.5
+      y: -1.5
+      z: -1.0
+
+    position_goal_max: # Maximum XYZ position for the goal
+      x: 0.5 
+      y: 0.5
+      z: 1.0
+    position_goal_min: # Minimum XYZ position for the goal
+      x: -0.5
+      y: -0.5
+      z:  0.0
+
+    # Define min and max joint values to define 
+    min_joint_pos:
+      - -3.14159 # -180  
+      - -1.7453  # -100
+      - -2.44346 # -140
+      - -3.49066 # -200
+      - -2.0071  # -115
+      - -6.28319 # -6.98132 # -400
+
+    max_joint_pos:
+      - 3.14159 # 180
+      - 1.7453  # 100
+      - 2.44346 # 140
+      - 3.49066 # 200
+      - 2.0071  # 115
+      - 6.28319 # 6.98132 # 400
+      
+    max_distance:     9.0 # Maximum distance from EE to the desired GOAL EE
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Simulation parameters
+    
+    time_step: 0.01
+    update_rate_multiplier: 10.0 # If training multiply the max update rate by this number 
+    
+    #-----------------------------------------------------------------------------------------#
+    #--- Set goal EE pos
+    
+    goal_ee_pos: 
+      x: 2.0
+      y: 2.0
+      z: 2.0
+
+    tolerance_goal_pos: 0.05 # Tolerance for the position of the goal
+
+    training: True
+    pos_dynamic: True
+    pos_dynamic_params:
+      x_max_amplitude: 0.1
+      y_max_amplitude: 0.1
+      z_max_amplitude: 0.1
+      x_max_freq: 0.01
+      y_max_freq: 0.01
+      z_max_freq: 0.01
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Set variables related to rewards
+    
+    step_reward: -0.01
+    multiplier_dist_reward: 1.0
+    reached_goal_reward: 100.0
+    joint_limits_reward: 10.0 

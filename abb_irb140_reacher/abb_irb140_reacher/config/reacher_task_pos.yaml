@@ -1,0 +1,90 @@
+irb140: #namespace
+
+    #--- Task Related parameters
+    n_actions: 6 # The actions are the joint positions
+    n_observations: 9 # The observations are XYZ positions of the TCP and the distance to GOAL
+    max_steps: 10000
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Action Space
+
+    # Define min and max joint values to define 
+    min_joint_pos: 
+      - -3.14159
+      - -1.5708
+      - -4.01426
+      - -3.49066
+      - -2.0071
+      - -6.98132
+    max_joint_pos:
+      - 3.14159
+      - 1.91986
+      - 0.872665
+      - 3.49066
+      - 2.0071
+      - 6.98132
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Observation Space
+    
+    # Set
+    position_ee_max: # Maximum XYZ position for the EE
+      x: 1.0 
+      y: 1.0
+      z: 2.0
+    position_ee_min: # Minimum XYZ position for the EE
+      x: -1.0
+      y: -1.0
+      z: -1.0
+
+    position_goal_max: # Maximum XYZ position for the goal
+      x: 1.0 # 0.7
+      y: 1.0 # 0.5
+      z: 2.0 # 1.0
+    position_goal_min: # Minimum XYZ position for the goal
+      x: -1.0 # 0.0
+      y: -1.0 # -0.5
+      z:  0.0 # 0.2
+      
+    max_distance:     9.0 # Maximum distance from EE to the desired GOAL EE
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Simulation parameters
+    
+    time_step: 0.01
+    update_rate_multiplier: 20.0 # If training multiply the max update rate by this number 
+    
+    #-----------------------------------------------------------------------------------------#
+    #--- Set goal EE pos
+    
+    goal_ee_pos: 
+      x: 2.0
+      y: 2.0
+      z: 2.0
+
+    tolerance_goal_pos: 0.1 # Tolerance for the position of the goal
+    tolerance_goal_ori: 0.25 # Tolerance for the orientation of the goal in radians 0.5->30 degrees 0.25->15 degrees
+
+    training: False
+    pos_dynamic: False
+    pos_dynamic_params:
+      x_max_amplitude: 0.1
+      y_max_amplitude: 0.1
+      z_max_amplitude: 0.1
+      x_max_freq: 0.01
+      y_max_freq: 0.01
+      z_max_freq: 0.01
+
+    #-----------------------------------------------------------------------------------------#
+    #--- Set variables related to rewards
+    
+    step_reward: -1.0 # 0.01
+    multiplier_dist_reward: 100.0
+    multiplier_ori_reward:  1.0
+    reached_goal_reward:  100.0 # 10.0
+    joint_limits_reward: -1000.0 # - 50.0
+
+    # step_reward: -0.01
+    # multiplier_dist_reward: 1.0
+    # reached_goal_reward: 10
+    # joint_limits_reward: -5.0

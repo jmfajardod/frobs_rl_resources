@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: abb_irb140
+    relative_path: urdf/irb140.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/abb_irb140.srdf
+  CONFIG:
+    author_name: Jose Fajardo
+    author_email: jmfajardod@unal.edu.co
+    generated_timestamp: 1634165465

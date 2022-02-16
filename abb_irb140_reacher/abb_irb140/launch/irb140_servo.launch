@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+    
+  <!-- ******************************************************************************************** -->
+  <!-- ******************************************************************************************** -->
+  <!-- Launch Gazebo -->
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="worlds/empty.world"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="paused" value="false"/>
+    <arg name="recording" value="false"/>
+  </include>
+
+  <!-- ******************************************************************************************** -->
+  <!-- ******************************************************************************************** -->
+  <!-- Spawn robot in Gazebo -->
+
+  <include file="$(find abb_irb140)/launch/spawn_model_gazebo.launch">
+    <arg name="robot_name" value="irb140"/>
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    <arg name="z" default="0.0"/>
+    <arg name="roll" default="$(eval 0.0 * 3.141592 / 180.0)"/>
+    <arg name="pitch" default="$(eval 0.0 * 3.141592 / 180.0)"/>
+    <arg name="yaw" default="$(eval 0.0 * 3.141592 / 180.0)"/>
+  </include>
+
+  <!-- ******************************************************************************************** -->
+  <!-- ******************************************************************************************** -->
+  <!-- Launch MoveIt  Servo-->
+
+  <arg name="load_robot_description" default="false" />
+  <!-- load URDF, SRDF and joint_limits configuration -->
+  <include file="$(find abb_irb140_moveit)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="$(arg load_robot_description)" />
+  </include>
+
+  <!-- Servo -->
+  <node name="servo_server" pkg="moveit_servo" type="servo_server" output="screen" >
+    <param name="parameter_ns" type="string" value="optional_parameter_namespace" />
+    <rosparam ns="optional_parameter_namespace" command="load" file="$(find abb_irb140_moveit)/config/abb_servo_config.yaml" />
+  </node>
+  
+
+  <!-- ******************************************************************************************** -->
+  <!-- ******************************************************************************************** -->
+  <!-- Launch RViz -->
+
+  <node 
+    pkg="rviz" 
+    type="rviz" 
+    name="rviz" 
+    args="-d $(find abb_irb140)/rviz/config_moveit.rviz"
+  />
+
+</launch>

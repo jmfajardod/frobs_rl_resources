@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Arg to change robot name and be able to spawn multiple robots-->
+    <arg name="robot_name" default="irb140"/>
+
+    <!-- Load the urdf into the parameter server. -->
+    <arg name="robot_xacro" value="$(find abb_irb140)/urdf/irb140.urdf.xacro"/>
+
+    <!-- ******************************************************************************************** -->
+    <!-- ******************************************************************************************** -->
+    <!-- Create the Robot State Publisher -->
+    <group ns="$(arg robot_name)">
+        <param name="robot_description" command="$(find xacro)/xacro $(arg robot_xacro)" />
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" />
+        <node pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" name="jt_pub_gui"/>
+    </group>
+    
+    <!-- ******************************************************************************************** -->
+    <!-- ******************************************************************************************** -->
+    <!-- Launch RViz -->
+
+    <node 
+        pkg="rviz" 
+        type="rviz" 
+        name="rviz" 
+        args="-d $(find abb_irb140)/rviz/config.rviz"
+    />
+    
+</launch>

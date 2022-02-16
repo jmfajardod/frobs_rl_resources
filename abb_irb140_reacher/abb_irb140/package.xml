@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>abb_irb140</name>
+  <version>0.2.0</version>
+  <description>The abb_irb140 package</description>
+
+  <maintainer email="srealper@unal.edu.co">Sebastian Realpe</maintainer>
+  <maintainer email="jmfajardod@unal.edu.co">Jose Manuel Fajardo</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export></export>
+
+</package>

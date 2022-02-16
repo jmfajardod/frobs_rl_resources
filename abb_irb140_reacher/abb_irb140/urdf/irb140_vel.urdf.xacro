@@ -1,0 +1,311 @@
+<?xml version="1.0" ?>
+
+<robot name="abb_irb140" xmlns:xacro="http://ros.org/wiki/xacro">
+
+	<!-- Controller type -->
+	<xacro:arg name="type_controller" default="hardware_interface/VelocityJointInterface"/> 
+
+	<!-- Include macros file -->
+  <xacro:include filename="$(find abb_irb140)/urdf/joint_macros.xacro"/>
+
+  <material name="Orange">
+    <color rgba="1.0 0.4 0.0 1.0"/>
+  </material>
+
+  <!-- Used for fixing robot to Gazebo 'base_arm' -->
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+
+	<!--base_link-->
+	<link name="base_link">
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/base_link.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/base_link.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="26.36"/>
+			<origin xyz="-0.0820 0.0004 0.0599" rpy="0 0 0"/>
+			<inertia ixx="0.222" ixy="0" ixz="0.0156" iyy="0.3553" iyz="0.0017" izz="0.5236" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_1"
+    type="revolute"
+    axis_xyz="0 0 1" 
+    origin_xyz="0 0 0"
+    origin_rpy="0 0 0" 
+    limit_lower="-3.14159"
+    limit_upper= "3.14159" 
+    limit_vel="2.618" 
+    parent="base_link" 
+    child="link_1"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_1-->
+	<link name="link_1">
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_1.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="0 0 0"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_1.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="34.56"/>
+			<origin xyz="0.0281 0.0438 0.2634" rpy="0 0 0"/>
+			<inertia ixx="0.5087" ixy="-0.0014" ixz="-0.0524" iyy="0.4612" iyz="-0.0688" izz="0.4567" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_2"
+    type="revolute"
+    axis_xyz="0 1 0" 
+    origin_xyz="0.070 0 0.352"
+    origin_rpy="0 0 0" 
+    limit_lower="-1.5708"
+    limit_upper= "1.91986" 
+    limit_vel="2.618" 
+    parent="link_1" 
+    child="link_2"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_2-->
+	<link name="link_2">
+		<visual>
+			<origin rpy="0 0 0" xyz="-0.07 0 -0.352"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_2.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="-0.07 0 -0.352"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_2.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="15.99"/>
+			<origin xyz="-0.0097 -0.0924 0.1983" rpy="0 0 0"/>
+			<inertia ixx="0.3286" ixy="0.0010" ixz="-0.0038" iyy="0.2775" iyz="0.0379" izz="0.0948" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_3"
+    type="revolute"
+    axis_xyz="0 1 0" 
+    origin_xyz="0 -0.065 0.360"
+    origin_rpy="0 0 0" 
+    limit_lower="-4.01426"
+    limit_upper= "0.872665" 
+    limit_vel="2.618" 
+    parent="link_2" 
+    child="link_3"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_3-->
+	<link name="link_3">
+		<visual>
+			<origin rpy="0 0 0" xyz="-0.07 0.065 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_3.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="-0.07 0.065 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_3.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="16.9793"/>
+			<origin xyz="0.0196 0.0725 -0.0057" rpy="0 0 0"/>
+			<inertia ixx="0.0682" ixy="0.0063" ixz="0.004" iyy="0.1990" iyz="0.0007" izz="0.1823" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_4"
+    type="revolute"
+    axis_xyz="1 0 0" 
+    origin_xyz="0.239 0.065 0"
+    origin_rpy="0 0 0" 
+    limit_lower="-3.49066"
+    limit_upper= "3.49066" 
+    limit_vel="6.2832" 
+    parent="link_3" 
+    child="link_4"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_4-->
+	<link name="link_4">
+		<visual>
+			<origin rpy="0 0 0" xyz="-0.309 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_4.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="-0.309 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_4.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="3.7398"/>
+			<origin xyz="0.0726 -0.0012 -0.0014" rpy="0 0 0"/>
+			<inertia ixx="0.0073" ixy="0.0004" ixz="-0.0001" iyy="0.0153" iyz="0" izz="0.0172" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_5"
+    type="revolute"
+    axis_xyz="0 1 0" 
+    origin_xyz="0.141 0 0"
+    origin_rpy="0 0 0" 
+    limit_lower="-2.0071"
+    limit_upper= "2.0071" 
+    limit_vel="6.2832" 
+    parent="link_4" 
+    child="link_5"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_5-->
+	<link name="link_5">
+		<visual>
+			<origin rpy="0 0 0" xyz="-0.450 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_5.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="-0.450 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_5.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="0.3039"/>
+			<origin xyz="-0.0014 0.0006 -0.0002" rpy="0 0 0"/>
+			<inertia ixx="0.001" ixy="0" ixz="0" iyy="0.002" iyz="0" izz="0.001" />
+		</inertial>
+	</link>
+
+  <xacro:m_joint
+    name="joint_6"
+    type="revolute"
+    axis_xyz="1 0 0" 
+    origin_xyz="0.065 0 0"
+    origin_rpy="0 0 0" 
+    limit_lower="-6.98132"
+    limit_upper= "6.98132" 
+    limit_vel="6.2832" 
+    parent="link_5" 
+    child="link_6"
+    type_controller="$(arg type_controller)"
+  />
+
+	<!--link_6-->
+	<link name="link_6">
+		<visual>
+			<origin rpy="0 0 0" xyz="-0.515 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/visual/link_6.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="abb_orange">
+				<color rgba="1 0.43 0 1"/>
+			</material>
+		</visual>
+		<!-- <collision>
+			<origin rpy="0 0 0" xyz="-0.515 0 -0.712"/>
+			<geometry>
+				<mesh filename="package://abb_irb140/meshes/irb140/collision_low_poly/link_6.stl" scale="0.01 0.01 0.01"/>
+			</geometry>
+			<material name="yellow">
+				<color rgba="0 1 1 1"/>
+			</material>
+		</collision> -->
+		<inertial>
+			<mass value="0.0549"/>
+			<origin xyz="-0.013 0 0" rpy="0 0 0"/>
+			<inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001" />
+		</inertial>
+	</link>
+
+	<joint name="joint_ee_link" type="fixed">
+		<parent link="link_6"/>
+		<child link="ee_link"/>
+		<origin rpy="0 0 0" xyz="0 0 0"/>
+	</joint>
+
+	<!--link_tool-->
+	<link name="ee_link"/>
+
+
+
+	<!-- Include Xacro files for joint and gazebo properties -->
+	<xacro:include filename="$(find abb_irb140)/urdf/irb140.gazebo.xacro"/>
+
+</robot>
