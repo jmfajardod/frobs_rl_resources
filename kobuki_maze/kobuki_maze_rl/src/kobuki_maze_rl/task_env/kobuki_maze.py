@@ -98,9 +98,9 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.goal_marker.pose.orientation.z = 0.0
         self.goal_marker.pose.orientation.w = 1.0
 
-        self.goal_marker.scale.x = 0.3
-        self.goal_marker.scale.y = 0.3
-        self.goal_marker.scale.z = 0.3
+        self.goal_marker.scale.x = 0.7
+        self.goal_marker.scale.y = 0.7
+        self.goal_marker.scale.z = 0.7
 
         self.goal_marker.color.r = 0.0
         self.goal_marker.color.g = 0.0
@@ -388,7 +388,8 @@ class KobukiMazeEnv(kobuki_lidar_env.KobukiLIDAREnv):
             reward   -= self.mult_dist_reward*self.mag_vec_dist
             
             abs_angle = np.abs(self.ang_rob_goal)
-            angle_diff = np.minimum(abs_angle, np.pi - abs_angle)
+            angle_diff = np.minimum(abs_angle, np.pi - abs_angle) # With positive and negative angular vel
+            # angle_diff = abs_angle                                # With only positive angular vel
             rospy.logwarn("ANGLE DIFF: " + str(angle_diff))
             reward   -= self.angle_diff_reward_multiplier*angle_diff
 

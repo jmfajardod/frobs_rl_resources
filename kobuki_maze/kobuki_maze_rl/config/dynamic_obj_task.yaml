@@ -8,12 +8,12 @@ kobuki_maze:
   #--- Simulation parameters
   
   time_step: 0.01
-  update_rate_multiplier: 5.0 # If training multiply the max update rate by this number 
+  update_rate_multiplier: 10.0 # If training multiply the max update rate by this number 
 
   #-----------------------------------------------------------------------------------------#
   #--- Set goal pos parameters
 
-  tolerance_goal_pos: 0.10 # Tolerance for the position of the goal
+  tolerance_goal_pos: 0.50 # Tolerance for the position of the goal
 
   #-----------------------------------------------------------------------------------------#
   #--- Set variables related to rewards

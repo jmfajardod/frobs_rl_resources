@@ -69,6 +69,7 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         # Spaces for initial robot position and goal position (for reset)
         self.angle_space = spaces.Box(low=-np.pi, high=np.pi, shape=(1,), dtype=np.float32)
         self.goal_space  = spaces.Box(low=goal_low, high=goal_high, dtype=np.float32)
+        self.goal_space_test  = spaces.Box(low=np.array([-15.0, -15.0]), high=np.array([15.0, 15.0]), dtype=np.float32)
 
         self.mag_vec_dist = 1.0
         self.ang_rob_goal = 0.0
@@ -95,9 +96,9 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.goal_marker.pose.orientation.z = 0.0
         self.goal_marker.pose.orientation.w = 1.0
 
-        self.goal_marker.scale.x = 0.3
-        self.goal_marker.scale.y = 0.3
-        self.goal_marker.scale.z = 0.3
+        self.goal_marker.scale.x = 0.7
+        self.goal_marker.scale.y = 0.7
+        self.goal_marker.scale.z = 0.7
 
         self.goal_marker.color.r = 0.0
         self.goal_marker.color.g = 0.0
@@ -195,7 +196,8 @@ class KobukiDynamicEnv(kobuki_lidar_env.KobukiLIDAREnv):
         self.box8_step = sample_box_vel[7]
 
         # Set goal position
-        self.goal_pos = self.goal_space.sample()
+        #self.goal_pos = self.goal_space.sample() # For training
+        self.goal_pos = self.goal_space_test.sample() # For testing
 
         self.tf_br.sendTransform((self.goal_pos[0], self.goal_pos[1], 0.0),
                         quaternion_from_euler(0, 0, 0),

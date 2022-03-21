@@ -6,15 +6,15 @@ model_params:
   # Save params
   save_freq: 100000
   save_prefix: td3_model
-  trained_model_name: trained_model
+  trained_model_name: trained_model_v2_3
   save_replay_buffer: True
 
   # Load model params
   load_model: True
-  model_name: trained_model_25_09_2021_04_49_19
+  model_name: trained_model_v2_2
 
   # Logging parameters
-  log_folder: TD3_New
+  log_folder: TD3_v2_3
   log_interval: 1 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 
@@ -35,9 +35,9 @@ model_params:
   # TD3 parameters
   td3_params:
     learning_rate: 0.001
-    buffer_size: 1000000
-    learning_starts: 100
-    batch_size: 100
+    buffer_size: 2000000
+    learning_starts: 25000
+    batch_size: 15000
     tau: 0.005
     gamma: 0.99
     gradient_steps: -1
@@ -45,5 +45,5 @@ model_params:
     target_policy_noise: 0.2
     target_noise_clip: 0.5
     train_freq:
-      freq: 100
-      unit: step  # episode or step
+      freq: 1
+      unit: episode  # episode or step

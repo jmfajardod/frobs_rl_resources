@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <robot name="kobuki_cam_sim" xmlns:xacro="http://ros.org/wiki/xacro">
 
-    <xacro:arg name="laser_visual" default="false"/>
+    <xacro:arg name="laser_visual" default="true"/>
 
     <gazebo reference="base_scan">
         <material>Gazebo/FlatBlack</material>
-        <sensor type="gpu_ray" name="lds_lfcd_sensor">
+        <sensor type="ray" name="lds_lfcd_sensor">
             <pose>0 0 0 0 0 0</pose>
             <visualize>$(arg laser_visual)</visualize>
             <update_rate>100</update_rate>
@@ -14,8 +14,8 @@
                     <horizontal>
                         <samples>8</samples>
                         <resolution>1</resolution>
-                        <min_angle>-3.141592</min_angle>
-                        <max_angle> 2.356194</max_angle>
+                        <min_angle>-3.1415</min_angle>
+                        <max_angle> 2.3561</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -26,10 +26,11 @@
                 <noise>
                     <type>gaussian</type>
                     <mean>0.0</mean>
-                    <stddev>0.01</stddev>
+                    <stddev>0.0</stddev>
                 </noise>
             </ray>
-            <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_gpu_laser.so">
+            <!-- <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_gpu_laser.so"> -->
+            <plugin name="gazebo_ros_lds_lfcd_controller" filename="libgazebo_ros_laser.so">
                 <topicName>scan</topicName>
                 <frameName>base_scan</frameName>
             </plugin>

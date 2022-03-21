@@ -49,7 +49,8 @@ class KobukiLIDAREnv(robot_BasicEnv.RobotBasicEnv):
         model_name_in_gazebo="kobuki_robot"
         namespace="/"
         pkg_name="kobuki_maze_rl"
-        urdf_file="kobuki_lidar.urdf.xacro"
+        urdf_file="kobuki_lidar_maze.urdf.xacro" # For maze
+        # urdf_file="kobuki_lidar.urdf.xacro" # For dynamic obstacles
         urdf_folder="/urdf"
         controller_file=None
         controller_list=[]

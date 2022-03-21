@@ -31,8 +31,8 @@ if __name__ == '__main__':
 
     # Launch the task environment
     # env = gym.make('KobukiEmptyEnv-v0')
-    env = gym.make('KobukiDynamicEnv-v3')
-    # env = gym.make('KobukiMazeEnv-v0')
+    # env = gym.make('KobukiDynamicEnv-v3')
+    env = gym.make('KobukiMazeEnv-v0')
 
     #--- Normalize action space
     env = NormalizeActionWrapper(env)
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     env = NormalizeObservWrapper(env)
 
     #--- Set max steps
-    env = TimeLimitWrapper(env, max_steps=15000)
+    env = TimeLimitWrapper(env, max_steps=5000)
     env.reset()
 
     #--- Set the save and log path
@@ -50,12 +50,14 @@ if __name__ == '__main__':
 
     
     #-- TD3
-    save_path = pkg_path + "/models/dynamic/td3/"
+    # save_path = pkg_path + "/models/empty/td3/"
+    # save_path = pkg_path + "/models/dynamic/td3/"
+    save_path = pkg_path + "/models/maze/td3/"
 
     model = TD3.load_trained(save_path + "trained_model")
 
     obs = env.reset()
-    episodes = 2
+    episodes = 10
     epi_count = 0
     while epi_count < episodes:
         action, _states = model.predict(obs, deterministic=True)

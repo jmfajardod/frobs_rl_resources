@@ -23,7 +23,7 @@ if __name__ == '__main__':
     ros_node.ros_kill_all_processes()
 
     # Launch Gazebo 
-    ros_gazebo.launch_Gazebo(paused=True, gui=False)
+    ros_gazebo.launch_Gazebo(paused=True, gui=True)
 
     # Start node
     rospy.logwarn("Start")
@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
     
     #-- TD3
-    save_path = pkg_path + "/models/td3/"
-    log_path = pkg_path + "/logs/td3/"
+    save_path = pkg_path + "/models/maze/td3/"
+    log_path = pkg_path + "/logs/maze/td3/"
     model = TD3(env, save_path, log_path, config_file_pkg="kobuki_maze_rl", config_filename="td3.yaml")
 
     #-- SAC

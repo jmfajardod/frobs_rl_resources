@@ -1,19 +1,19 @@
 kobuki_maze:
   # The maze task
   action_space: 2
-  observation_space: 15
+  observation_space: 15 # 8 + 2 + 3 + 2 
   lidar_samples: 8
 
   #-----------------------------------------------------------------------------------------#
   #--- Simulation parameters
   
   time_step: 0.01
-  update_rate_multiplier: 40.0 # If training multiply the max update rate by this number 
+  update_rate_multiplier: 10.0 # If training multiply the max update rate by this number 
 
   #-----------------------------------------------------------------------------------------#
   #--- Set goal pos parameters
 
-  tolerance_goal_pos: 0.10 # Tolerance for the position of the goal
+  tolerance_goal_pos: 0.50 # Tolerance for the position of the goal
 
   #-----------------------------------------------------------------------------------------#
   #--- Set variables related to rewards

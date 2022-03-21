@@ -55,7 +55,7 @@ Visualization Manager:
       Value: true
     - Alpha: 1
       Class: rviz/RobotModel
-      Collision Enabled: false
+      Collision Enabled: true
       Enabled: true
       Links:
         All Links Enabled: true
@@ -132,9 +132,9 @@ Visualization Manager:
       Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
-      Invert Rainbow: false
+      Invert Rainbow: true
       Max Color: 255; 255; 255
-      Min Color: 0; 0; 0
+      Min Color: 204; 0; 0
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -145,7 +145,7 @@ Visualization Manager:
       Topic: /scan
       Unreliable: false
       Use Fixed Frame: true
-      Use rainbow: true
+      Use rainbow: false
       Value: true
     - Class: rviz/TF
       Enabled: true
@@ -202,10 +202,10 @@ Visualization Manager:
                 {}
               gyro_link:
                 {}
-              wheel_left_link:
-                {}
-              wheel_right_link:
-                {}
+            wheel_left_link:
+              {}
+            wheel_right_link:
+              {}
           goal_frame:
             {}
       Update Interval: 0
@@ -245,7 +245,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -0.024999991059303284
+      Angle: -1.579999566078186
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -255,10 +255,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 18.496183395385742
+      Scale: 19.73822784423828
       Target Frame: <Fixed Frame>
-      X: 2.284111738204956
-      Y: 1.4965825080871582
+      X: -0.15072673559188843
+      Y: -0.7025257349014282
     Saved: ~
 Window Geometry:
   Displays:
