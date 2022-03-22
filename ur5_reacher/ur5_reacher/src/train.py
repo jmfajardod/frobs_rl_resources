@@ -1,7 +1,7 @@
 #!/bin/python3
 
-from numpy.lib.npyio import save
 from ur5_reacher.task_env.ur5_reacher import ur5_moveit
+
 import gym
 import rospy
 import rospkg
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     ros_node.ros_kill_all_processes()
 
     # Launch Gazebo 
-    ros_gazebo.launch_Gazebo(paused=True, gui=False)
+    ros_gazebo.launch_Gazebo(paused=True, gui=True)
 
     # Start node
     rospy.logwarn("Start")

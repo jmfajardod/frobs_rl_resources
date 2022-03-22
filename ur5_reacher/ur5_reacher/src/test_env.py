@@ -1,6 +1,6 @@
 #!/bin/python3
 
-from abb_irb120_reacher.task_env.irb120_reacher import abb_irb120_moveit
+from ur5_reacher.task_env.ur5_reacher import UR5ReacherEnv
 import gym
 import rospy
 import sys
@@ -19,14 +19,14 @@ if __name__ == '__main__':
     ros_node.ros_kill_all_processes()
 
     # Launch Gazebo 
-    ros_gazebo.launch_Gazebo(paused=True, pub_clock_frequency=100)
+    ros_gazebo.launch_Gazebo(paused=True, pub_clock_frequency=100, gui=False)
 
     # Start node
     rospy.logwarn("Start")
-    rospy.init_node('test_irb120_reacher')
+    rospy.init_node('test_ur5_reacher')
 
     # Launch the task environment
-    env = gym.make('ABBIRB120ReacherEnv-v0')
+    env = gym.make('UR5ReacherEnv-v0')
 
     #--- Normalize action space
     env = NormalizeActionWrapper(env)

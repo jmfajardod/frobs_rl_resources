@@ -44,7 +44,6 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
         """
         ros_params.ros_load_yaml_from_pkg("ur5_reacher", "reacher_task.yaml", ns="/")
         self.get_params()
-        print("YAML cargado")
 
         """
         Define the action and observation space.
@@ -63,19 +62,6 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
 
         observations_high_vec_EE_GOAL = np.array([1.0, 1.0, 1.0])
         observations_low_vec_EE_GOAL  = np.array([-1.0, -1.0, -1.0])
-
-        #- Define the maximum and minimum distance to the GOAL
-        #observations_high_dist = np.array([self.max_distance])
-        #observations_low_dist = np.array([0.0])
-
-        #--- Concatenate the observation space limits for positions and distance to goal
-        #- With Goal pos, EE pos and joint angles, 
-        #high = np.concatenate([observations_high_goal_pos_range,observations_high_ee_pos_range, self.max_joint_values])
-        #low  = np.concatenate([observations_low_goal_pos_range,observations_low_ee_pos_range, self.min_joint_values,  ])
-
-        #- With Goal pos and joint angles
-        #high = np.concatenate([observations_high_goal_pos_range, self.max_joint_values, ])
-        #low  = np.concatenate([observations_low_goal_pos_range, self.min_joint_values, ])
 
         #- With Vector from EE to goal, Goal pos and joint angles
         high = np.concatenate([observations_high_vec_EE_GOAL, observations_high_goal_pos_range, self.max_joint_values, ])
@@ -142,7 +128,6 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
         Sets the Robot in its init pose
         The Simulation will be unpaused for this purpose.
         """
-        
 
         self.init_pos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         result = self.set_trajectory_joints(self.init_pos)
@@ -151,8 +136,9 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
 
         #--- If training set random goal
         if self.training:
-            # self.init_pos = self.get_randomJointVals()
+            self.init_pos = self.get_randomJointVals()
             init_goal_vector = self.get_randomValidGoal()
+            rospy.logwarn("Init goal: " + str(init_goal_vector))
             self.goal = init_goal_vector
             init_goal_msg = SetLinkStateRequest()
             init_goal_msg.link_state.pose.position.x = init_goal_vector[0]
@@ -160,6 +146,7 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
             init_goal_msg.link_state.pose.position.z = init_goal_vector[2]
 
             self.set_init_goal_client.call(init_goal_msg)
+            self.goal = init_goal_vector
             rospy.logwarn("Desired goal--->" + str(self.goal))
 
         #--- Make Marker msg for publishing
@@ -222,14 +209,13 @@ class UR5ReacherEnv(ur5_moveit.UR5MoveItEnv):
 
         obs = np.concatenate((
             vec_EE_GOAL,             # Vector from EE to Goal
-            current_goal,               # Position of Goal
+            current_goal,            # Position of Goal
             #self.ee_pos,            # Current position of EE
             self.joint_values        # Current joint angles
             ),
             axis=None
         )
-
-        rospy.logwarn("OBSERVATIONS====>>>>>>>"+str(obs))
+        obs = np.array(obs, dtype=np.float32)
 
         #--- UNCOMMENT TO RETURN A DICT WITH OBS AND GOAL
         # return {

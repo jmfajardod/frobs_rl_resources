@@ -1,5 +1,0 @@
-rollout/success rate,rollout/ep_rew_mean,time/time_elapsed,time/episodes,time/total timesteps,time/fps,rollout/ep_len_mean,train/n_updates,train/learning_rate,train/actor_loss,train/critic_loss
-0.0,-138.653892,19,1,100,5,100.0,,,,
-0.0,-147.383518,35,2,200,5,100.0,80,0.001,1.6720787048339845,0.005441558675374836
-0.0,-136.906754,50,3,300,5,100.0,180,0.001,1.9927316308021545,0.006833145604468882
-0.0,-135.0901225,68,4,400,5,100.0,280,0.001,2.2230372428894043,0.017784811102319508

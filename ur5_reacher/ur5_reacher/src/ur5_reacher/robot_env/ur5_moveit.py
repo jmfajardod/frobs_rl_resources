@@ -137,7 +137,7 @@ class UR5MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         self._check_subs_and_pubs_connection()
 
         #--- Start MoveIt Object
-        self.move_abb_object = MoveABB()
+        self.move_ur5_object = MoveUR5()
 
         """
         Finished __init__ method
@@ -212,14 +212,14 @@ class UR5MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         ee_target.position.y = action[1]
         ee_target.position.z = action[2]
 
-        result = self.move_abb_object.ee_traj(ee_target)
+        result = self.move_ur5_object.ee_traj(ee_target)
         return result
 
     def set_trajectory_joints(self, q_positions):
         """
         Set a joint position target for the joints.
         """
-        result = self.move_abb_object.joint_traj(q_positions)
+        result = self.move_ur5_object.joint_traj(q_positions)
 
         return result
 
@@ -245,7 +245,7 @@ class UR5MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         Returns geometry_msgs/PoseStamped
         """
         ros_gazebo.gazebo_unpause_physics()
-        gripper_pose = self.move_abb_object.ee_pose()
+        gripper_pose = self.move_ur5_object.ee_pose()
         ros_gazebo.gazebo_pause_physics()
         return gripper_pose
 
@@ -253,12 +253,12 @@ class UR5MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         """
         Returns a list of 3 elements defining the [roll, pitch, yaw] of the end-effector.
         """
-        gripper_rpy = self.move_abb_object.ee_rpy()
+        gripper_rpy = self.move_ur5_object.ee_rpy()
         return gripper_rpy
 
     def get_joint_angles(self):
         ros_gazebo.gazebo_unpause_physics()
-        joint_angles = self.move_abb_object.joint_angles()
+        joint_angles = self.move_ur5_object.joint_angles()
         ros_gazebo.gazebo_pause_physics()
         return joint_angles
 
@@ -267,21 +267,21 @@ class UR5MoveItEnv(robot_BasicEnv.RobotBasicEnv):
         Check if the goal is reachable
         * goal is a list with 3 elements, XYZ positions of the EE
         """
-        result = self.move_abb_object.is_goal_reachable(goal)
+        result = self.move_ur5_object.is_goal_reachable(goal)
         return result
     
     def get_randomJointVals(self):
-        return self.move_abb_object.group.get_random_joint_values()
+        return self.move_ur5_object.group.get_random_joint_values()
 
     def get_randomPose(self):
-        return self.move_abb_object.group.get_random_pose()
+        return self.move_ur5_object.group.get_random_pose()
 
-# Class to move ABB robot through MoveIt
+# Class to move UR5 robot through MoveIt
 
-class MoveABB(object):
+class MoveUR5(object):
 
     def __init__(self):
-        rospy.logwarn("===== In MoveABB")
+        rospy.logwarn("===== In MoveUR5")
 
         #--- Init MoveIt commander
         moveit_commander.roscpp_initialize(sys.argv)
@@ -296,7 +296,7 @@ class MoveABB(object):
         self.group_name = "ur5_arm"
         self.group = moveit_commander.MoveGroupCommander(self.group_name)
 
-        rospy.logwarn("===== Out MoveABB")
+        rospy.logwarn("===== Out MoveUR5")
 
     def ee_traj(self, pose):
         self.group.set_pose_target(pose)

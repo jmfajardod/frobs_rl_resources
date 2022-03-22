@@ -2,7 +2,7 @@ ur5: #namespace
 
     #--- Task Related parameters
     n_actions: 6 # The actions are the joint positions
-    n_observations: 4 # The observations are XYZ positions of the TCP and the distance to GOAL
+    n_observations: 12 # The observations are XYZ positions of the TCP and the distance to GOAL
     max_steps: 10000
 
     #-----------------------------------------------------------------------------------------#
@@ -10,20 +10,20 @@ ur5: #namespace
 
     # Define min and max joint values to define 
     min_joint_pos:
-      - -3.14159  
-      - -3.14159  
-      - -3.14159 
-      - -3.14159 
-      - -3.14159  
-      - -3.14159 
+      - -6.283185307179586 
+      - -6.283185307179586  
+      - -3.141592653589793
+      - -6.283185307179586 
+      - -6.283185307179586  
+      - -6.283185307179586 
 
     max_joint_pos:
-      - 3.14159
-      - 3.14159  
-      - 3.14159 
-      - 3.14159 
-      - 3.14159  
-      - 3.14159 
+      - 6.283185307179586 
+      - 6.283185307179586 
+      - 3.141592653589793
+      - 6.283185307179586
+      - 6.283185307179586 
+      - 6.283185307179586 
 
     #-----------------------------------------------------------------------------------------#
     #--- Observation Space
