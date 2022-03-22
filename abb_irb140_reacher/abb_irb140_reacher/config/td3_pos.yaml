@@ -6,15 +6,15 @@ model_params:
   # Save params
   save_freq: 5000
   save_prefix: td3_model
-  trained_model_name: trained_model_5
+  trained_model_name: trained_model_new
   save_replay_buffer: True
 
   # Load model params
-  load_model: True
+  load_model: False
   model_name: trained_model_4
 
   # Logging parameters
-  log_folder: TD3_5
+  log_folder: TD3_New
   log_interval: 1 # The number of episodes between logs
   reset_num_timesteps: False # If true, will reset the number of timesteps to 0 every training 
 
